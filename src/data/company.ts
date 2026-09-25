@@ -74,3 +74,9 @@ export const closingCta = {
 
 export const contactIntro =
   "Get in touch with us to elevate your brand with innovative design, marketing, and digital solutions - let's create something amazing together!";
+
+/** The four disciplines named in the About summary, in the order the text lists them. */
+export const aboutDisciplines = ["Graphic Design", "Branding", "Digital Marketing", "Content Creation"] as const;
+
+/** Short labels for the three commitments made in the Why Choose Us copy (not new claims). */
+export const whyChooseUsPoints = ["Clients first", "Customized solutions", "Creativity & innovation"] as const;

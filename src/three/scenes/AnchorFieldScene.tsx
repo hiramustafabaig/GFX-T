@@ -130,10 +130,12 @@ export function AnchorFieldScene({ state, quality, still = false }: Props) {
       if (u.uTime.value > 0.35) u.uIntro.value = MathUtils.damp(u.uIntro.value, 1, 1.6, delta);
     }
 
-    // Damped so scroll input feels weighted rather than mechanical.
-    u.uMorph1.value = MathUtils.damp(u.uMorph1.value, remap(p, HERO_BEATS.morph1), 5, delta);
-    u.uMorph2.value = MathUtils.damp(u.uMorph2.value, remap(p, HERO_BEATS.morph2), 5, delta);
-    u.uDraw.value = MathUtils.damp(u.uDraw.value, remap(p, HERO_BEATS.draw), 5, delta);
+    // Damped so scroll input feels weighted rather than mechanical. A still frame renders only
+    // on demand, so it jumps straight to the target instead of easing over many frames.
+    const approach = (from: number, to: number) => (still ? to : MathUtils.damp(from, to, 5, delta));
+    u.uMorph1.value = approach(u.uMorph1.value, remap(p, HERO_BEATS.morph1));
+    u.uMorph2.value = approach(u.uMorph2.value, remap(p, HERO_BEATS.morph2));
+    u.uDraw.value = approach(u.uDraw.value, remap(p, HERO_BEATS.draw));
 
     // Pointer: the pen-tool interaction.
     u.uMouse.value.set(s.pointer.x, s.pointer.y);

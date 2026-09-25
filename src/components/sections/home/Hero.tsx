@@ -8,6 +8,7 @@ import { hasWebGL, useFinePointer, useIsMobile, useReducedMotion } from "@/lib/d
 import { ActionLink } from "@/components/buttons/ActionLink";
 import { HERO_BEATS, type AnchorFieldState } from "@/three/scenes/AnchorFieldScene";
 import { HeroFallback } from "./HeroFallback";
+import { SelectionBox } from "@/components/ui/SelectionBox";
 import { cn } from "@/lib/cn";
 
 registerGsap();
@@ -36,7 +37,9 @@ export function Hero() {
   const reduced = useReducedMotion();
   const mobile = useIsMobile();
   const finePointer = useFinePointer();
-  const [beat, setBeat] = useState(0);
+  const [scrollBeat, setBeat] = useState(0);
+  // Without motion the field shows its final form, so the headline selects the matching line.
+  const beat = reduced ? 2 : scrollBeat;
   const [webgl, setWebgl] = useState<boolean | null>(null);
 
   // eslint-disable-next-line react-hooks/set-state-in-effect -- capability probe runs client-side only
@@ -80,7 +83,7 @@ export function Hero() {
           0.55,
         );
     },
-    { scope: sectionRef, dependencies: [reduced] },
+    { scope: sectionRef, dependencies: [reduced], revertOnUpdate: true },
   );
 
   // Headline width axis follows the beat.
@@ -216,22 +219,5 @@ export function Hero() {
         </div>
       </div>
     </section>
-  );
-}
-
-/** A design-tool bounding box: hairline frame with square handles at the corners. */
-function SelectionBox({ visible }: { visible: boolean }) {
-  return (
-    <span
-      aria-hidden
-      className={cn(
-        "pointer-events-none absolute -left-[0.1em] -right-[0.04em] bottom-[0.02em] top-[0.08em] border border-signal/80 transition-opacity duration-500",
-        visible ? "opacity-100" : "opacity-0",
-      )}
-    >
-      {["-left-1 -top-1", "-right-1 -top-1", "-bottom-1 -left-1", "-bottom-1 -right-1"].map((pos) => (
-        <span key={pos} className={cn("absolute size-2 border border-signal bg-ink-950", pos)} />
-      ))}
-    </span>
   );
 }

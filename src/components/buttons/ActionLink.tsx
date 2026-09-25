@@ -7,6 +7,8 @@ type Props = {
   children: ReactNode;
   /** "primary" is the one next action in a view — the only place yellow fills a control. */
   variant?: "primary" | "ghost";
+  /** The surface the control sits on. */
+  tone?: "ink" | "paper";
   className?: string;
 };
 
@@ -15,12 +17,14 @@ type Props = {
  * an arrow on hover. Internal links run through the page transition; mailto/tel/external
  * links render as plain anchors.
  */
-export function ActionLink({ href, children, variant = "ghost", className }: Props) {
+export function ActionLink({ href, children, variant = "ghost", tone = "ink", className }: Props) {
   const classes = cn(
     "group label inline-flex h-12 items-center gap-4 pl-5 pr-4 transition-colors duration-300",
     variant === "primary"
-      ? "bg-signal text-ink-950 hover:bg-paper"
-      : "border border-ink-700 text-paper hover:border-paper",
+      ? cn("bg-signal text-ink-950", tone === "ink" ? "hover:bg-paper" : "hover:bg-ink-950 hover:text-paper")
+      : tone === "ink"
+        ? "border border-ink-700 text-paper hover:border-paper"
+        : "border border-ink-950/25 text-ink-950 hover:border-ink-950",
     className,
   );
 

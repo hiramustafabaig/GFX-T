@@ -15,6 +15,12 @@ import { useReducedMotion } from "@/lib/device";
 import { findNavItem } from "@/data/navigation";
 
 type TransitionApi = { navigate: (href: string) => void };
+
+/** Split "/services#print-media" into its route and in-page target. */
+const parseHref = (href: string) => {
+  const [path, hash] = href.split("#");
+  return { path: path || "/", hash: hash ? `#${hash}` : null };
+};
 const TransitionContext = createContext<TransitionApi | null>(null);
 
 export const usePageTransition = () => {
@@ -39,12 +45,21 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
   const bladeRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const labelRef = useRef<HTMLParagraphElement>(null);
-  const pending = useRef<string | null>(null);
+  const pending = useRef<{ path: string; hash: string | null } | null>(null);
   const busy = useRef(false);
 
   const navigate = useCallback(
     (href: string) => {
-      if (busy.current || href === pathname) return;
+      if (busy.current) return;
+      const target = parseHref(href);
+
+      // Same route: just move to the in-page target (or the top).
+      if (target.path === pathname) {
+        const el = target.hash ? document.querySelector<HTMLElement>(target.hash) : null;
+        if (lenis) lenis.scrollTo(el ?? 0, { offset: el ? -80 : 0 });
+        else (el ?? document.body).scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
+        return;
+      }
 
       if (reduced) {
         router.push(href);
@@ -52,7 +67,7 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
       }
 
       busy.current = true;
-      pending.current = href;
+      pending.current = target;
       lenis?.stop();
 
       const item = findNavItem(href);
@@ -71,13 +86,24 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
 
   // Reveal once the new route has committed.
   useEffect(() => {
-    if (!pending.current || pending.current !== pathname) return;
+    if (!pending.current || pending.current.path !== pathname) return;
+    const { hash } = pending.current;
     pending.current = null;
 
     window.scrollTo(0, 0);
     lenis?.scrollTo(0, { immediate: true, force: true });
     lenis?.start();
     ScrollTrigger.refresh();
+    // Move keyboard/screen-reader focus to the new page, as a full page load would.
+    document.getElementById("main")?.focus({ preventScroll: true });
+
+    // Deep link: land on the target section while the panel still covers the page.
+    const anchor = hash ? document.querySelector<HTMLElement>(hash) : null;
+    if (anchor) {
+      const top = anchor.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo(0, top);
+      lenis?.scrollTo(top, { immediate: true, force: true });
+    }
 
     gsap
       .timeline({
