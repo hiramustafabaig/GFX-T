@@ -4,41 +4,40 @@ import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import { ScrollTrigger, useGSAP, registerGsap } from "@/lib/motion";
 import { hasWebGL, useFinePointer, useIsMobile, useReducedMotion } from "@/lib/device";
-import type { RidgeState } from "./scenes/RidgeScene";
+import type { RibbonState } from "./scenes/RibbonScene";
 
 registerGsap();
 
-const RidgeCanvas = dynamic(() => import("./RidgeCanvas"), { ssr: false });
+const RibbonCanvas = dynamic(() => import("./RibbonCanvas"), { ssr: false });
 
-/** Static stand-in for devices without WebGL: a few ridgelines drawn once in SVG. */
-function RidgeFallback() {
-  const rows = Array.from({ length: 14 }, (_, r) => {
-    const y = 40 + r * 14;
+/** Static stand-in for devices without WebGL: a twisted band of lines drawn once in SVG. */
+function RibbonFallback() {
+  const lines = Array.from({ length: 28 }, (_, l) => {
+    const v = (l / 27) * 2 - 1;
     const pts = Array.from({ length: 61 }, (_, i) => {
-      const x = i * 10;
-      const xn = i / 60;
-      const env = Math.max(0, Math.sin(Math.PI * xn)) ** 3;
-      const h = env * (18 + 14 * Math.sin(i * 0.7 + r * 1.3) + 8 * Math.sin(i * 0.23 - r));
-      return `${x},${(y - h).toFixed(1)}`;
+      const u = i / 60;
+      const twist = u * 5.2;
+      const y = 130 + Math.sin(u * 3.4) * 60 + Math.cos(twist) * v * 55 * (0.55 + 0.45 * Math.sin(u * Math.PI));
+      return `${(u * 600).toFixed(1)},${y.toFixed(1)}`;
     });
-    return { r, d: `M${pts.join(" L")}` };
+    return { l, d: `M${pts.join(" L")}` };
   });
   return (
     <svg viewBox="0 0 600 260" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full" aria-hidden>
-      {rows.map(({ r, d }) => (
-        <path key={r} d={d} fill="var(--color-ink-950)" stroke="var(--color-paper)" strokeOpacity={0.15 + (r / 14) * 0.7} strokeWidth="1" vectorEffect="non-scaling-stroke" />
+      {lines.map(({ l, d }) => (
+        <path key={l} d={d} fill="none" stroke="var(--color-signal)" strokeOpacity={0.25} strokeWidth="1" vectorEffect="non-scaling-stroke" />
       ))}
     </svg>
   );
 }
 
 /**
- * Host for the closing CTA's Signal Ridge: mounts the canvas only when the section nears the
+ * Host for the closing CTA's Signal Ribbon: mounts the canvas only when the section nears the
  * viewport, feeds it scroll progress and the pointer (relative to this box).
  */
-export function RidgeStage({ className }: { className?: string }) {
+export function RibbonStage({ className }: { className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
-  const state = useRef<RidgeState>({ progress: 0, pointer: null });
+  const state = useRef<RibbonState>({ progress: 0, pointer: null });
   const reduced = useReducedMotion();
   const mobile = useIsMobile();
   const finePointer = useFinePointer();
@@ -92,8 +91,8 @@ export function RidgeStage({ className }: { className?: string }) {
 
   return (
     <div ref={ref} aria-hidden className={className ?? "absolute inset-0"}>
-      {near && webgl === true && <RidgeCanvas state={state} quality={mobile ? "mobile" : "desktop"} still={reduced} />}
-      {webgl === false && <RidgeFallback />}
+      {near && webgl === true && <RibbonCanvas state={state} quality={mobile ? "mobile" : "desktop"} still={reduced} />}
+      {webgl === false && <RibbonFallback />}
     </div>
   );
 }

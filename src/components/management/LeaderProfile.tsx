@@ -30,6 +30,17 @@ export function LeaderProfile({ leader, index }: { leader: Leader; index: number
   useGSAP(
     () => {
       if (reduced) return;
+      // Desktop: the portrait also slides in from its own side (CEO from the left, COO from the right).
+      const mm = gsap.matchMedia();
+      mm.add("(min-width: 768px)", () => {
+        gsap.from("figure", {
+          x: flip ? 180 : -180,
+          autoAlpha: 0,
+          duration: 1.3,
+          ease: "gfx.out",
+          scrollTrigger: { trigger: "figure", start: "top 85%", once: true },
+        });
+      });
       gsap
         .timeline({ scrollTrigger: { trigger: "[data-portrait]", start: "top 80%", once: true } })
         .fromTo("[data-portrait]", { clipPath: "inset(100% 0 0 0)" }, { clipPath: "inset(0% 0 0 0)", duration: 1.3, ease: "gfx.inOut" })
