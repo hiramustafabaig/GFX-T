@@ -9,13 +9,14 @@ type Props = {
   state: React.RefObject<AnchorFieldState>;
   quality: "desktop" | "mobile";
   still?: boolean;
+  placement?: "hero" | "stage";
 };
 
 /**
  * Canvas host for the Anchor Field. Rendering stops entirely when the canvas is off-screen,
  * pixel ratio is capped, and PerformanceMonitor steps the ratio down on struggling GPUs.
  */
-export default function AnchorFieldCanvas({ state, quality, still }: Props) {
+export default function AnchorFieldCanvas({ state, quality, still, placement }: Props) {
   const hostRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(true);
   const maxDpr = quality === "mobile" ? 1.5 : 1.75;
@@ -43,7 +44,7 @@ export default function AnchorFieldCanvas({ state, quality, still }: Props) {
           onDecline={() => setDpr((d) => Math.max(1, d - 0.25))}
           onIncline={() => setDpr((d) => Math.min(maxDpr, d + 0.25))}
         />
-        <AnchorFieldScene state={state} quality={quality} still={still} />
+        <AnchorFieldScene state={state} quality={quality} still={still} placement={placement} />
       </Canvas>
     </div>
   );

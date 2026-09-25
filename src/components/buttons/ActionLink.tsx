@@ -1,41 +1,83 @@
-import type { ReactNode } from "react";
+"use client";
+
+import { useRef, type ReactNode } from "react";
 import { TransitionLink } from "@/components/transitions/TransitionLink";
 import { cn } from "@/lib/cn";
+import { useMagnetic } from "@/lib/useMagnetic";
 
 type Props = {
   href: string;
   children: ReactNode;
-  /** "primary" is the one next action in a view — the only place yellow fills a control. */
+  /** "primary" is the one next action in a view: a signal-yellow fill. */
   variant?: "primary" | "ghost";
+  /** The surface the control sits on. */
+  tone?: "ink" | "paper";
+  size?: "md" | "lg";
   className?: string;
 };
 
 /**
- * The site's single button language: a mono label beside an anchor square that turns into
- * an arrow on hover. Internal links run through the page transition; mailto/tel/external
- * links render as plain anchors.
+ * The site's button language. On hover a fill wipes across along the logo's slash, the label
+ * rolls to a second copy, and the arrow chip turns — three quick, coordinated moves. Internal
+ * links run through the page transition; mailto/tel/external links are plain anchors. On fine
+ * pointers the whole control leans toward the cursor.
  */
-export function ActionLink({ href, children, variant = "ghost", className }: Props) {
+export function ActionLink({ href, children, variant = "ghost", tone = "ink", size = "md", className }: Props) {
+  const magnetRef = useRef<HTMLSpanElement>(null);
+  useMagnetic(magnetRef, 0.2);
+
+  const skin = {
+    primary: {
+      base: "bg-signal text-ink-950",
+      fill: tone === "ink" ? "bg-paper" : "bg-ink-950",
+      hoverText: tone === "ink" ? "group-hover:text-ink-950" : "group-hover:text-signal",
+      chip: tone === "ink" ? "bg-ink-950 text-signal" : "bg-ink-950 text-signal group-hover:bg-signal group-hover:text-ink-950",
+    },
+    ghost: {
+      base: tone === "ink" ? "border border-ink-700 text-paper" : "border border-ink-950/30 text-ink-950",
+      fill: tone === "ink" ? "bg-signal" : "bg-ink-950",
+      hoverText: tone === "ink" ? "group-hover:text-ink-950 group-hover:border-signal" : "group-hover:text-paper group-hover:border-ink-950",
+      chip: tone === "ink" ? "bg-signal text-ink-950 group-hover:bg-ink-950 group-hover:text-signal" : "bg-ink-950 text-paper group-hover:bg-signal group-hover:text-ink-950",
+    },
+  }[variant];
+
   const classes = cn(
-    "group label inline-flex h-12 items-center gap-4 pl-5 pr-4 transition-colors duration-300",
-    variant === "primary"
-      ? "bg-signal text-ink-950 hover:bg-paper"
-      : "border border-ink-700 text-paper hover:border-paper",
+    "group label relative isolate inline-flex items-center gap-4 overflow-hidden font-medium transition-[color,border-color] duration-500",
+    size === "lg" ? "h-14 pl-7 pr-2 text-[0.75rem]" : "h-12 pl-5 pr-1.5",
+    skin.base,
+    skin.hoverText,
     className,
   );
 
   const content = (
     <>
-      <span>{children}</span>
-      <span aria-hidden className="relative grid size-4 place-items-center overflow-hidden">
-        <span className="size-1.5 bg-current transition-transform duration-300 group-hover:scale-0" />
-        <svg
-          viewBox="0 0 16 16"
-          className="absolute size-4 -translate-x-4 transition-transform duration-300 group-hover:translate-x-0"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-        >
+      {/* Fill: wipes in on a slant, like the transition blade. */}
+      <span
+        aria-hidden
+        className={cn(
+          "absolute -inset-y-1 -left-[15%] -z-10 w-[130%] -translate-x-full skew-x-[-24deg] transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:translate-x-0",
+          skin.fill,
+        )}
+      />
+      {/* Label: rolls up to an identical copy. */}
+      <span className="relative block overflow-hidden">
+        <span className="block transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:-translate-y-full">
+          {children}
+        </span>
+        <span aria-hidden className="absolute inset-0 block translate-y-full transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:translate-y-0">
+          {children}
+        </span>
+      </span>
+      {/* Arrow chip */}
+      <span
+        aria-hidden
+        className={cn(
+          "grid place-items-center transition-colors duration-500",
+          size === "lg" ? "size-10" : "size-9",
+          skin.chip,
+        )}
+      >
+        <svg viewBox="0 0 16 16" className="size-3.5 -rotate-45 transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:rotate-0" fill="none" stroke="currentColor" strokeWidth="1.6">
           <path d="M2 8h11M9 4l4 4-4 4" />
         </svg>
       </span>
@@ -43,7 +85,7 @@ export function ActionLink({ href, children, variant = "ghost", className }: Pro
   );
 
   const isInternal = href.startsWith("/");
-  return isInternal ? (
+  const link = isInternal ? (
     <TransitionLink href={href} className={classes}>
       {content}
     </TransitionLink>
@@ -51,5 +93,10 @@ export function ActionLink({ href, children, variant = "ghost", className }: Pro
     <a href={href} className={classes}>
       {content}
     </a>
+  );
+  return (
+    <span ref={magnetRef} className="inline-block">
+      {link}
+    </span>
   );
 }

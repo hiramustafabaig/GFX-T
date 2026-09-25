@@ -7,6 +7,7 @@ import { TransitionLink } from "@/components/transitions/TransitionLink";
 import { useLenis } from "@/components/providers/SmoothScroll";
 import { gsap, motion, useGSAP } from "@/lib/motion";
 import { cn } from "@/lib/cn";
+import { useFocusTrap } from "@/lib/useFocusTrap";
 
 type Props = { open: boolean; onClose: () => void; currentHref: string };
 
@@ -45,6 +46,8 @@ export function MenuOverlay({ open, onClose, currentHref }: Props) {
     if (!timeline) return;
     if (open) {
       lenis?.stop();
+      // Visible before focusing: hidden elements can't take focus.
+      gsap.set(rootRef.current, { visibility: "visible" });
       timeline.timeScale(1).play();
       rootRef.current?.querySelector<HTMLElement>("a")?.focus({ preventScroll: true });
     } else {
@@ -53,25 +56,7 @@ export function MenuOverlay({ open, onClose, currentHref }: Props) {
     }
   }, [open, lenis]);
 
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-      if (e.key !== "Tab" || !rootRef.current) return;
-      const focusables = rootRef.current.querySelectorAll<HTMLElement>("a, button");
-      const first = focusables[0];
-      const last = focusables[focusables.length - 1];
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [open, onClose]);
+  useFocusTrap(rootRef, open, onClose);
 
   return (
     <div
@@ -99,7 +84,7 @@ export function MenuOverlay({ open, onClose, currentHref }: Props) {
                     onClick={onClose}
                     aria-current={active ? "page" : undefined}
                     className={cn(
-                      "flex items-baseline gap-4 py-1 font-display text-[clamp(2.5rem,11vw,5rem)] font-semibold uppercase leading-none tracking-tight [font-variation-settings:'wdth'_112]",
+                      "flex items-baseline gap-4 py-1 font-display text-[clamp(2.1rem,9.4vw,5rem)] font-semibold uppercase leading-none tracking-tight [font-variation-settings:'wdth'_100] sm:[font-variation-settings:'wdth'_112]",
                       active ? "text-signal" : "text-paper",
                     )}
                   >

@@ -12,6 +12,7 @@ import { Cursor } from "@/components/ui/Cursor";
 const archivo = Archivo({
   subsets: ["latin"],
   axes: ["wdth"],
+  style: ["normal", "italic"],
   variable: "--font-archivo",
   display: "swap",
 });
@@ -87,7 +88,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <SmoothScroll>
           <TransitionProvider>
             <Header />
-            <main id="main">{children}</main>
+            <main id="main" tabIndex={-1} className="outline-none">
+              {children}
+            </main>
             <Footer />
             <Cursor />
           </TransitionProvider>
