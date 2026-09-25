@@ -1,4 +1,5 @@
 import { aboutSummary } from "@/data/company";
+import { MobileShapes } from "@/components/ui/MobileShapes";
 import { site } from "@/lib/site";
 
 const facts = [
@@ -19,7 +20,8 @@ import { YearMark } from "@/components/typography/YearMark";
  */
 export function AboutTeaser() {
   return (
-    <section aria-labelledby="about-teaser-heading" className="relative bg-ink-950 py-[var(--spacing-section)]">
+    <section aria-labelledby="about-teaser-heading" className="relative isolate bg-ink-950 py-[var(--spacing-section)]">
+      <MobileShapes variant={1} />
       <div className="container-page">
         <SectionLabel index="02">About GFX-T</SectionLabel>
 

@@ -157,7 +157,7 @@ export function AnchorFieldScene({ state, quality, still = false, placement = "s
       u.uFormScale.value = Math.min(1.7, (3.468 * 2 * 0.8) / 3.3, (halfW * 2 * 0.78) / 3.1);
     } else {
       // Full stage: copy top-left (landscape) / top (portrait), form low-right / low.
-      u.uFormOffset.value.set(portrait ? 0 : halfW * 0.555, portrait ? -2.3 + m2 * 0.1 : -0.2 + m2 * 0.1, 0);
+      u.uFormOffset.value.set(portrait ? 0 : halfW * 0.5, portrait ? -2.3 + m2 * 0.1 : -0.05 + m2 * 0.1, 0);
       u.uFormScale.value = portrait ? Math.min(0.62, halfW * 0.28) : Math.min(1.5, halfW * 0.27);
     }
     const px = s.pointerActive ? s.pointer.x : 0;

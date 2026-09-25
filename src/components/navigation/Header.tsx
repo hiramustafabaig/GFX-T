@@ -1,9 +1,10 @@
 "use client";
 
-import { usePathname } from "next/navigation";
-import { useRef, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { navigation, findNavItem } from "@/data/navigation";
 import { TransitionLink } from "@/components/transitions/TransitionLink";
+import { usePageTransition } from "@/components/transitions/TransitionProvider";
 import { Logo } from "@/components/brand/Logo";
 import { ActionLink } from "@/components/buttons/ActionLink";
 import { MenuOverlay } from "./MenuOverlay";
@@ -20,6 +21,15 @@ export function Header() {
   const menuOpen = menuPath === pathname;
   const setMenuOpen = (open: boolean) => setMenuPath(open ? pathname : null);
   const [scrolled, setScrolled] = useState(false);
+  const router = useRouter();
+  const { navigate } = usePageTransition();
+  // The header persists across routes, so it can count in-site page views: go back when there is
+  // an in-site page to return to, otherwise (landed here directly) go to Home.
+  const views = useRef(0);
+  useEffect(() => {
+    views.current += 1;
+  }, [pathname]);
+  const goBack = () => (views.current > 1 ? router.back() : navigate("/"));
   const progressRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -57,9 +67,24 @@ export function Header() {
         )}
       >
         <div className="container-page flex h-[var(--header-h)] items-center justify-between gap-6">
-          <TransitionLink href="/" aria-label="GFX-T — home" className="relative z-10 shrink-0">
-            <Logo tone="paper" priority className="w-[112px] md:w-[132px]" />
-          </TransitionLink>
+          <div className="relative z-10 flex shrink-0 items-center gap-3">
+            {/* Phones: a back arrow on every page except Home. */}
+            {pathname !== "/" && (
+              <button
+                type="button"
+                onClick={goBack}
+                aria-label="Go back"
+                className="grid size-11 place-items-center border border-paper/20 text-paper transition-colors hover:border-signal hover:text-signal lg:hidden"
+              >
+                <svg viewBox="0 0 16 16" className="size-4" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
+                  <path d="M14 8H3M7 4 3 8l4 4" />
+                </svg>
+              </button>
+            )}
+            <TransitionLink href="/" aria-label="GFX-T — home">
+              <Logo tone="paper" priority className="w-[104px] md:w-[132px]" />
+            </TransitionLink>
+          </div>
 
           <nav aria-label="Primary" className="hidden lg:block">
             <ul className="flex items-center gap-1 xl:gap-2">

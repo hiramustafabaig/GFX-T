@@ -51,7 +51,7 @@ export function GrowthPath({ className }: { className?: string }) {
       ref={ref}
       style={{ "--p": 0 } as React.CSSProperties}
       className={cn(
-        "relative overflow-hidden border border-ink-800 bg-[radial-gradient(120%_140%_at_0%_0%,rgb(255_191_1/0.08),transparent_55%),var(--color-ink-900)] p-6 md:p-10",
+        "relative overflow-hidden border border-ink-800 bg-[radial-gradient(120%_140%_at_0%_0%,rgb(255_191_1/0.08),transparent_55%),var(--color-ink-900)] px-6 pb-6 pt-6 md:px-10 md:pb-8 md:pt-8",
         className,
       )}
     >
@@ -62,7 +62,7 @@ export function GrowthPath({ className }: { className?: string }) {
         <span>Our path</span>
       </div>
 
-      <div className="relative mt-10 lg:mt-14">
+      <div className="relative mt-8 lg:mt-10">
         {/* Track + lit progress (vertical on mobile, horizontal on large screens). */}
         <div aria-hidden className="absolute bottom-2 left-[9px] top-2 w-px bg-ink-700 lg:bottom-auto lg:left-0 lg:right-0 lg:top-[9px] lg:h-px lg:w-auto" />
         <div

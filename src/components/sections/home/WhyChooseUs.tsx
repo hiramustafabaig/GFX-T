@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { MobileShapes } from "@/components/ui/MobileShapes";
 import { useRef, useState } from "react";
 import { whyChooseUs, whyChooseUsPoints } from "@/data/company";
 import { gsap, SplitText, useGSAP, registerGsap } from "@/lib/motion";
@@ -58,11 +59,12 @@ export function WhyChooseUs() {
   );
 
   return (
-    <section ref={ref} aria-labelledby="why-heading" className="relative isolate overflow-hidden bg-ink-950 py-[var(--spacing-section)]">
+    <section ref={ref} aria-labelledby="why-heading" className="relative isolate overflow-hidden bg-ink-950 pb-[var(--spacing-section)] pt-14 md:pt-24">
       {/* Subtle signal glow + the logo's slash as texture. */}
       <div aria-hidden className="absolute inset-0 -z-10 bg-[radial-gradient(60%_70%_at_85%_35%,rgb(255_191_1/0.13),transparent_70%)]" />
       <div aria-hidden className="absolute inset-0 -z-10 opacity-[0.05] [background-image:repeating-linear-gradient(-56deg,var(--color-paper)_0_1px,transparent_1px_22px)] [mask-image:linear-gradient(90deg,transparent,black_60%)]" />
 
+      <MobileShapes variant={1} />
       <div className="container-page grid items-center gap-14 lg:grid-cols-12 lg:gap-12">
         <div className="lg:col-span-7">
           <SectionLabel index="08">Our promise</SectionLabel>
