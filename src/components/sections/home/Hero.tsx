@@ -103,27 +103,6 @@ export function Hero() {
     { dependencies: [selected, reduced] },
   );
 
-  // Measure the free band between the copy and the beat bar; the form lands there on portrait.
-  useEffect(() => {
-    const stage = sectionRef.current?.querySelector<HTMLElement>(".sticky");
-    const copy = sectionRef.current?.querySelector<HTMLElement>("[data-hero-copy]");
-    const bar = sectionRef.current?.querySelector<HTMLElement>("[data-hero-bar]");
-    if (!stage || !copy || !bar) return;
-    const measure = () => {
-      const s = stage.getBoundingClientRect();
-      const top = (copy.getBoundingClientRect().bottom - s.top) / s.height;
-      // The bar is hidden on phones: then the band runs to the bottom of the stage.
-      const bottom = bar.offsetParent ? (bar.getBoundingClientRect().top - s.top) / s.height : 0.99;
-      fieldState.current.formBand = { top: top + 0.02, bottom: bottom - 0.02 };
-    };
-    measure();
-    const ro = new ResizeObserver(measure);
-    ro.observe(stage);
-    ro.observe(copy);
-    document.fonts?.ready.then(measure);
-    return () => ro.disconnect();
-  }, []);
-
   // Pointer → NDC for the pen-tool interaction; coordinates readout like a design tool.
   useEffect(() => {
     if (!finePointer || reduced) return;
@@ -158,12 +137,14 @@ export function Hero() {
           className="absolute inset-0 opacity-60 [background-image:radial-gradient(var(--color-ink-700)_1px,transparent_1.2px)] [background-size:32px_32px] [mask-image:radial-gradient(ellipse_at_60%_40%,black,transparent_75%)]"
         />
         {/* The field recedes behind the copy (top / left) and stays vivid where the form lands. */}
-        <div className="absolute inset-0 [mask-image:linear-gradient(180deg,rgb(0_0_0/0.3)_0%,rgb(0_0_0/0.45)_45%,black_72%)] lg:[mask-image:linear-gradient(90deg,rgb(0_0_0/0.3)_0%,rgb(0_0_0/0.45)_30%,black_58%)]">
-          {webgl === true && (
-            <AnchorFieldCanvas state={fieldState} quality={mobile ? "mobile" : "desktop"} still={reduced} />
-          )}
-          {webgl === false && <HeroFallback />}
-        </div>
+        {/* Tablet/desktop: the field fills the stage, receding behind the copy. On phones it gets
+            its own box below the copy instead (see further down), so it can never sit on text. */}
+        {!mobile && (
+          <div className="absolute inset-0 [mask-image:linear-gradient(180deg,rgb(0_0_0/0.3)_0%,rgb(0_0_0/0.45)_45%,black_72%)] lg:[mask-image:linear-gradient(90deg,rgb(0_0_0/0.3)_0%,rgb(0_0_0/0.45)_30%,black_58%)]">
+            {webgl === true && <AnchorFieldCanvas state={fieldState} quality="desktop" still={reduced} />}
+            {webgl === false && <HeroFallback />}
+          </div>
+        )}
 
         {/* Legibility veil behind the copy: from the top-left on desktop, from the top on mobile. */}
         <div
@@ -178,7 +159,7 @@ export function Hero() {
               <span aria-hidden className="size-1.5 bg-ink-950" />
               {site.descriptor}
             </li>
-            <li className="border border-paper/20 px-3 py-1.5 text-paper/85 backdrop-blur-sm">Lahore, Pakistan</li>
+            <li className="hidden border border-paper/20 px-3 py-1.5 text-paper/85 backdrop-blur-sm min-[400px]:block">Lahore, Pakistan</li>
             <li className="border border-paper/20 px-3 py-1.5 text-paper/85 backdrop-blur-sm">
               Est. <span className="text-signal">{site.founded}</span>
             </li>
@@ -214,25 +195,34 @@ export function Hero() {
             })}
           </h1>
 
-          <div data-hero-copy className="mt-7 flex flex-col gap-6 md:mt-9 2xl:flex-row 2xl:items-end 2xl:gap-10">
-            <p data-hero-fade className="max-w-md text-lead text-paper/85">
+          <div className="mt-6 flex flex-col gap-5 md:mt-9 md:gap-6 2xl:flex-row 2xl:items-end 2xl:gap-10">
+            <p data-hero-fade className="max-w-md text-base text-paper/85 md:text-lead">
               {site.tagline}
             </p>
-            <div data-hero-fade className="flex flex-wrap gap-3">
-              <ActionLink href="/contact" variant="primary">
+            <div data-hero-fade className="flex gap-2 md:gap-3">
+              <ActionLink href="/contact" variant="primary" size={mobile ? "sm" : "md"}>
                 Start a project
               </ActionLink>
-              <ActionLink href="/services">Our services</ActionLink>
+              <ActionLink href="/services" size={mobile ? "sm" : "md"}>
+                {mobile ? "Services" : "Our services"}
+              </ActionLink>
             </div>
           </div>
 
-          <div aria-hidden className="flex-1" />
+          {/* Phones: the field lives in its own box in the remaining space. */}
+          {mobile ? (
+            <div aria-hidden className="relative -mx-[var(--spacing-gutter)] mt-4 min-h-0 flex-1">
+              {webgl === true && <AnchorFieldCanvas state={fieldState} quality="mobile" still={reduced} placement="box" />}
+              {webgl === false && <HeroFallback />}
+            </div>
+          ) : (
+            <div aria-hidden className="flex-1" />
+          )}
 
           <div
             data-hero-fade
-            data-hero-bar
             aria-hidden
-            // Decorative; hidden on phones so the form gets the free space below the copy.
+            // Decorative; hidden on phones so the form's box gets the space.
             className="label hidden items-center justify-between border-t border-ink-800 pt-4 text-ink-400 sm:flex"
           >
             <span className="flex items-center gap-6">

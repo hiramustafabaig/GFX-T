@@ -84,7 +84,7 @@ export function PortfolioExhibition({ projects = portfolio }: { projects?: Portf
         })}
       </ol>
 
-      <div className="mt-16 flex flex-col gap-6 border-t border-ink-800 pt-8 md:flex-row md:items-center md:justify-between">
+      <div className="mt-12 flex flex-col gap-6 border border-ink-800 bg-ink-900 p-6 md:flex-row md:items-center md:justify-between md:p-8">
         <p className="max-w-md text-paper/80">{portfolioNote}</p>
         <ActionLink href={mailto("Portfolio request")} variant="primary">
           Request the complete portfolio
@@ -118,8 +118,13 @@ function PieceTile({ project, number, onOpen }: { project: PortfolioProject; num
       <SelectionBox visible={false} className="inset-0 group-hover:opacity-100 group-focus-visible:opacity-100" />
       <span className="mt-3 flex items-baseline justify-between gap-3">
         <span className="min-w-0">
-          <span className="block truncate text-sm text-paper transition-colors group-hover:text-signal">{project.title}</span>
-          <span className="label mt-0.5 block text-ink-400">{category}</span>
+          <span className="block truncate text-sm font-semibold text-paper transition-colors group-hover:text-signal">
+            {project.clientName ?? project.title}
+          </span>
+          {/* Second line only when it adds something: a named client's work type, or "brand identity". */}
+          {(project.clientName || identity) && (
+            <span className="label mt-0.5 block text-ink-400">{identity ? "Brand identity" : category}</span>
+          )}
         </span>
         <span className="label text-ink-400">{String(number).padStart(2, "0")}</span>
       </span>

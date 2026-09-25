@@ -3,7 +3,6 @@ import { PageIntro } from "@/components/layout/PageIntro";
 import { NextChapter } from "@/components/layout/NextChapter";
 import { ServiceArtboard } from "@/components/services/ServiceArtboard";
 import { ActionLink } from "@/components/buttons/ActionLink";
-import { SectionLabel } from "@/components/typography/SectionLabel";
 import { services, servicesIntro } from "@/data/services";
 import { servicesTeaser } from "@/data/company";
 import { contact } from "@/lib/site";
@@ -17,24 +16,26 @@ export const metadata: Metadata = {
 export default function ServicesPage() {
   return (
     <>
-      <PageIntro index="03" eyebrow="Our Services" title="Our Services" lead={servicesIntro}>
-        {/* Index: the whole offer is readable before any scrolling. */}
-        <nav aria-label="Services index" className="mt-16 md:ml-[33%]">
-          <ol className="grid gap-x-10 gap-y-2 sm:grid-cols-2">
+      <PageIntro index="03" eyebrow="What we do" title="Our Services" lead={servicesIntro}>
+        {/* Quick index: every service reachable in one tap. */}
+        <nav aria-label="Services index" className="mt-8">
+          <ul className="flex flex-wrap gap-2">
             {services.map((s) => (
               <li key={s.slug}>
-                <a href={`#${s.slug}`} className="group flex items-baseline gap-4 py-1 text-paper/85 transition-colors hover:text-paper">
-                  <span className="label text-ink-400 group-hover:text-signal">{s.index}</span>
+                <a
+                  href={`#${s.slug}`}
+                  className="label group inline-flex items-center gap-2 border border-ink-700 px-3 py-2 text-paper/85 transition-colors hover:border-signal hover:bg-signal hover:text-ink-950"
+                >
+                  <span className="text-signal group-hover:text-ink-950">{s.index}</span>
                   {s.title}
                 </a>
               </li>
             ))}
-          </ol>
+          </ul>
         </nav>
       </PageIntro>
 
-      {/* Artboards: hairline grid, no cards. */}
-      <section aria-label="Services" className="container-page">
+      <section aria-label="Services" className="container-page py-12 md:py-16">
         <div className="grid border-l border-t border-ink-800 md:grid-cols-2 xl:grid-cols-3">
           {services.map((s) => (
             <div key={s.slug} className="border-b border-r border-ink-800">
@@ -44,21 +45,19 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <section aria-labelledby="services-cta" className="py-[var(--spacing-section)]">
-        <div className="container-page grid gap-10 lg:grid-cols-12">
-          <SectionLabel className="lg:col-span-3">
-            Next step
-          </SectionLabel>
-          <div className="lg:col-span-8 lg:col-start-5">
-            <h2 id="services-cta" className="font-display text-h2 font-bold uppercase">
+      <section aria-labelledby="services-cta" className="container-page pb-16 md:pb-24">
+        <div className="flex flex-col gap-8 border border-ink-800 bg-ink-900 p-6 md:flex-row md:items-center md:justify-between md:p-10">
+          <div>
+            <p className="label text-signal">Next step</p>
+            <h2 id="services-cta" className="mt-3 font-display text-[clamp(1.5rem,1rem+1.8vw,2.5rem)] font-extrabold uppercase leading-tight">
               Book a call directly with our CEO
             </h2>
-            <div className="mt-10 flex flex-wrap gap-3">
-              <ActionLink href={contact.ceoPhone.href} variant="primary">
-                {contact.ceoPhone.display}
-              </ActionLink>
-              <ActionLink href="/contact">All contact details</ActionLink>
-            </div>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <ActionLink href={contact.ceoPhone.href} variant="primary">
+              {contact.ceoPhone.display}
+            </ActionLink>
+            <ActionLink href="/contact">All contact details</ActionLink>
           </div>
         </div>
       </section>

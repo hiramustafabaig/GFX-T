@@ -14,7 +14,7 @@ export default function ManagementPage() {
   return (
     <>
       <PageIntro index="06" eyebrow="Our Management" title={managementHeading}>
-        <ol className="mt-16 grid gap-6 md:ml-[33%] md:grid-cols-2">
+        <ol className="mt-8 grid max-w-3xl gap-3 md:grid-cols-2">
           {leaders.map((l, i) => (
             <li key={l.slug}>
               <a href={`#${l.slug}`} className="group flex items-baseline gap-4 border-t border-ink-800 pt-4">

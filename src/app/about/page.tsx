@@ -1,13 +1,10 @@
 import type { Metadata } from "next";
 import { PageIntro } from "@/components/layout/PageIntro";
 import { NextChapter } from "@/components/layout/NextChapter";
-import { RevealText } from "@/components/typography/RevealText";
 import { SectionLabel } from "@/components/typography/SectionLabel";
-import { ActionLink } from "@/components/buttons/ActionLink";
-import { GrowthPath } from "@/components/sections/shared/GrowthPath";
-import { YearMark } from "@/components/typography/YearMark";
-import { VisionMission } from "@/components/sections/shared/VisionMission";
-import { aboutParagraphs, aboutSummary } from "@/data/company";
+import { SectionHeading } from "@/components/typography/SectionHeading";
+import { Leadership } from "@/components/sections/shared/Leadership";
+import { aboutParagraphs, aboutSummary, mission, vision, type Principle } from "@/data/company";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -16,86 +13,96 @@ export const metadata: Metadata = {
   alternates: { canonical: "/about" },
 };
 
-// The philosophy paragraph opens with the company's core belief; it is set as a pull-quote
-// and the rest of the paragraph follows, so no sentence appears twice.
+// The second paragraph opens with the company's core belief; it is set as a pull-quote and the
+// rest of the paragraph follows, so no sentence appears twice.
 const [origin, philosophy] = aboutParagraphs;
 const splitAt = philosophy.indexOf(". ") + 1;
 const belief = philosophy.slice(0, splitAt);
 const philosophyRest = philosophy.slice(splitAt).trim();
+
+/** Services as named in the About copy ("Our services include …"). */
+const aboutServices = ["Branding", "Social Media Management", "Digital Marketing", "Design", "Content Creation"];
+
+function Principles({ title, items, accent }: { title: string; items: Principle[]; accent?: boolean }) {
+  return (
+    <article className={accent ? "bg-signal p-6 text-ink-950 md:p-8" : "border border-ink-800 bg-ink-900 p-6 md:p-8"}>
+      <h3 className="font-display text-[clamp(1.5rem,1.1rem+1.4vw,2.25rem)] font-extrabold uppercase leading-none">{title}</h3>
+      <ol className="mt-6 space-y-5">
+        {items.map((p) => (
+          <li key={p.index} className={accent ? "border-t border-ink-950/20 pt-5" : "border-t border-ink-800 pt-5"}>
+            <p className="flex items-baseline gap-3">
+              <span className={accent ? "label text-ink-950/70" : "label text-signal"}>{p.index}</span>
+              <span className="text-lg font-semibold">{p.title}</span>
+            </p>
+            <p className={accent ? "mt-2 text-[0.9375rem] leading-relaxed text-ink-900" : "mt-2 text-[0.9375rem] leading-relaxed text-paper/75"}>
+              {p.body}
+            </p>
+          </li>
+        ))}
+      </ol>
+    </article>
+  );
+}
 
 export default function AboutPage() {
   return (
     <>
       <PageIntro index="02" eyebrow="Our story" title="About Us" subtitle="Welcome to GFX-T" />
 
-      {/* ORIGIN — the year stays pinned while the story scrolls past it. */}
-      <section aria-labelledby="origin-heading" className="border-t border-ink-800 py-[var(--spacing-section)]">
-        <div className="container-page grid gap-12 lg:grid-cols-12">
-          <div className="lg:col-span-6">
-            <div className="lg:sticky lg:top-[calc(var(--header-h)+6vh)]">
-              <YearMark year={site.founded} fill="y" track="section" className="[--year-size:30vw] lg:[--year-size:min(19vw,22rem)]" />
-              <p className="label mt-6 text-ink-400">Lahore, Pakistan — the COVID era</p>
+      {/* Story: facts on the left, the two paragraphs on the right, one shared top edge. */}
+      <section aria-labelledby="story-heading" className="container-page grid gap-10 py-12 md:py-16 lg:grid-cols-12 lg:gap-12">
+        <aside className="lg:col-span-4">
+          <dl className="grid gap-px border border-ink-800 bg-ink-800">
+            <div className="bg-ink-950 p-5">
+              <dt className="label text-ink-400">Founded</dt>
+              <dd className="mt-2 font-display text-3xl font-extrabold text-signal">{site.founded}</dd>
+              <dd className="mt-1 text-sm text-paper/70">During the COVID era</dd>
             </div>
-          </div>
+            <div className="bg-ink-950 p-5">
+              <dt className="label text-ink-400">Based in</dt>
+              <dd className="mt-2 text-lg font-semibold text-paper">Lahore, Pakistan</dd>
+            </div>
+            <div className="bg-ink-950 p-5">
+              <dt className="label text-ink-400">Our services include</dt>
+              <dd className="mt-3 flex flex-wrap gap-2">
+                {aboutServices.map((s) => (
+                  <span key={s} className="label border border-ink-700 px-2.5 py-1.5 text-paper/85">
+                    {s}
+                  </span>
+                ))}
+              </dd>
+            </div>
+          </dl>
+        </aside>
 
-          <div className="space-y-24 lg:col-span-5 lg:col-start-8 lg:pt-[12vh]">
-            <article>
-              <SectionLabel as="h2" id="origin-heading" index="01">
-                Origin
-              </SectionLabel>
-              <RevealText split="words" className="mt-8 text-lead text-paper/90">
-                {origin}
-              </RevealText>
-            </article>
-
-            <article aria-labelledby="philosophy-heading">
-              <SectionLabel as="h2" id="philosophy-heading" index="02">
-                Philosophy
-              </SectionLabel>
-              <RevealText
-                as="p"
-                className="mt-8 font-display text-h3 font-semibold uppercase leading-[1.02] [font-variation-settings:'wdth'_104]"
-              >
-                {belief}
-              </RevealText>
-              <RevealText split="words" className="mt-8 text-paper/80">
-                {philosophyRest}
-              </RevealText>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      {/* GROWTH */}
-      <section aria-labelledby="growth-heading" className="border-t border-ink-800 py-[var(--spacing-section)]">
-        <div className="container-page">
-          <SectionLabel index="03">Growth</SectionLabel>
-          <RevealText as="h2" id="growth-heading" className="mt-8 max-w-[18ch] font-display text-h2 font-bold uppercase">
-            Grown steadily since 2020
-          </RevealText>
-          <GrowthPath className="mt-16 lg:mt-24" />
-        </div>
-      </section>
-
-      <VisionMission detail="full" index="04" />
-
-      {/* PEOPLE — hands the story over to the Management chapter. */}
-      <section className="py-[var(--spacing-section)]">
-        <div className="container-page grid gap-10 lg:grid-cols-12">
-          <SectionLabel index="05" className="lg:col-span-3">
-            The people
+        <div className="lg:col-span-8">
+          <SectionLabel as="h2" id="story-heading" index="01">
+            Where we started
           </SectionLabel>
-          <div className="lg:col-span-8 lg:col-start-5">
-            <p className="text-h3 font-display font-semibold uppercase leading-[1.02]">
-              Led by over three decades of media experience and a creative head who has worked with clients
-              across Qatar, UAE, UK and Jordan.
-            </p>
-            <div className="mt-10">
-              <ActionLink href="/management">Meet our CEO &amp; COO</ActionLink>
-            </div>
+          <p className="mt-6 text-lead text-paper/90">{origin}</p>
+
+          <blockquote className="mt-10 border-l-4 border-signal pl-6">
+            <p className="font-display text-[clamp(1.4rem,1rem+1.5vw,2.25rem)] font-extrabold uppercase leading-tight">{belief}</p>
+          </blockquote>
+          <p className="mt-6 text-paper/80">{philosophyRest}</p>
+        </div>
+      </section>
+
+      {/* Vision & Mission — the full principles (the home page shows the summaries). */}
+      <section aria-labelledby="vm-heading" className="border-t border-ink-800 py-12 md:py-16">
+        <div className="container-page">
+          <SectionLabel index="02">Vision &amp; Mission</SectionLabel>
+          <SectionHeading id="vm-heading" accent="drives" size="md" className="mt-6">
+            What drives us
+          </SectionHeading>
+          <div className="mt-10 grid gap-4 md:grid-cols-2 md:gap-6">
+            <Principles title="Our Vision" items={vision} />
+            <Principles title="Our Mission" items={mission} accent />
           </div>
         </div>
       </section>
+
+      <Leadership index="03" compact />
 
       <NextChapter current="/about" />
     </>

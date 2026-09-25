@@ -71,7 +71,7 @@ export function ClientsUniverse() {
               key={c.slug}
               data-flip-id={c.slug}
               hidden={!shown}
-              className="group relative flex aspect-square flex-col justify-between border-b border-r border-ink-950/15 p-4 md:p-5"
+              className="group relative flex aspect-[4/3] flex-col justify-between border-b border-r border-ink-950/15 p-3 md:p-5"
             >
               <SelectionBox visible={false} tone="ink" className="inset-0 group-hover:opacity-100" />
               <div className="label flex justify-between gap-2 text-ink-700">

@@ -12,7 +12,7 @@ type Props = {
   variant?: "primary" | "ghost";
   /** The surface the control sits on. */
   tone?: "ink" | "paper";
-  size?: "md" | "lg";
+  size?: "sm" | "md" | "lg";
   className?: string;
 };
 
@@ -30,20 +30,21 @@ export function ActionLink({ href, children, variant = "ghost", tone = "ink", si
     primary: {
       base: "bg-signal text-ink-950",
       fill: tone === "ink" ? "bg-paper" : "bg-ink-950",
-      hoverText: tone === "ink" ? "group-hover:text-ink-950" : "group-hover:text-signal",
+      // Plain `hover:` — `group-hover:` only styles descendants, never the group element itself.
+      hoverText: tone === "ink" ? "hover:text-ink-950" : "hover:text-signal",
       chip: tone === "ink" ? "bg-ink-950 text-signal" : "bg-ink-950 text-signal group-hover:bg-signal group-hover:text-ink-950",
     },
     ghost: {
       base: tone === "ink" ? "border border-ink-700 text-paper" : "border border-ink-950/30 text-ink-950",
       fill: tone === "ink" ? "bg-signal" : "bg-ink-950",
-      hoverText: tone === "ink" ? "group-hover:text-ink-950 group-hover:border-signal" : "group-hover:text-paper group-hover:border-ink-950",
+      hoverText: tone === "ink" ? "hover:border-signal hover:text-ink-950" : "hover:border-ink-950 hover:text-paper",
       chip: tone === "ink" ? "bg-signal text-ink-950 group-hover:bg-ink-950 group-hover:text-signal" : "bg-ink-950 text-paper group-hover:bg-signal group-hover:text-ink-950",
     },
   }[variant];
 
   const classes = cn(
-    "group label relative isolate inline-flex items-center gap-4 overflow-hidden font-medium transition-[color,border-color] duration-500",
-    size === "lg" ? "h-14 pl-7 pr-2 text-[0.75rem]" : "h-12 pl-5 pr-1.5",
+    "group label relative isolate inline-flex shrink-0 items-center overflow-hidden whitespace-nowrap font-medium transition-[color,border-color] duration-500",
+    size === "lg" ? "h-14 gap-4 pl-7 pr-2" : size === "sm" ? "h-11 gap-3 pl-4 pr-1" : "h-12 gap-4 pl-5 pr-1.5",
     skin.base,
     skin.hoverText,
     className,
@@ -73,7 +74,7 @@ export function ActionLink({ href, children, variant = "ghost", tone = "ink", si
         aria-hidden
         className={cn(
           "grid place-items-center transition-colors duration-500",
-          size === "lg" ? "size-10" : "size-9",
+          size === "lg" ? "size-10" : size === "sm" ? "size-8" : "size-9",
           skin.chip,
         )}
       >

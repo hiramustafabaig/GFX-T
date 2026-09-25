@@ -9,7 +9,7 @@ type Props = {
   state: React.RefObject<AnchorFieldState>;
   quality: "desktop" | "mobile";
   still?: boolean;
-  placement?: "hero" | "stage";
+  placement?: "stage" | "box";
 };
 
 /**

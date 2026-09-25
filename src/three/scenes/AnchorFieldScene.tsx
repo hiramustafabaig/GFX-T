@@ -34,11 +34,6 @@ export type AnchorFieldState = {
   /** Pointer in normalised device coordinates. */
   pointer: { x: number; y: number };
   pointerActive: boolean;
-  /**
-   * Free vertical band for the form on portrait screens, as fractions of the stage height
-   * (measured from the DOM). The form is centred in it and scaled to fit.
-   */
-  formBand?: { top: number; bottom: number };
 };
 
 type Props = {
@@ -46,11 +41,8 @@ type Props = {
   quality: "desktop" | "mobile";
   /** Render the final composition, without time-based motion. */
   still?: boolean;
-  /**
-   * "hero": copy top-left, form low-right. "stage": copy bottom-left (closing CTA, Contact),
-   * form upper-right and a little smaller so it never meets the headline.
-   */
-  placement?: "hero" | "stage";
+  /** "stage": the canvas fills the hero stage. "box": the canvas is its own box (mobile hero). */
+  placement?: "stage" | "box";
 };
 
 // The shaders write colours straight to the screen (no output colour-space conversion), so the
@@ -69,7 +61,7 @@ export const HERO_BEATS = {
 
 const remap = (v: number, [a, b]: readonly [number, number]) => MathUtils.clamp((v - a) / (b - a), 0, 1);
 
-export function AnchorFieldScene({ state, quality, still = false, placement = "hero" }: Props) {
+export function AnchorFieldScene({ state, quality, still = false, placement = "stage" }: Props) {
   const { gl, size } = useThree();
   const group = useRef<Group>(null);
 
@@ -154,30 +146,19 @@ export function AnchorFieldScene({ state, quality, still = false, placement = "h
     u.uMouse.value.set(s.pointer.x, s.pointer.y);
     u.uMouseActive.value = MathUtils.damp(u.uMouseActive.value, s.pointerActive && !still ? 1 : 0, 6, delta);
 
-    // Form placement: beside the headline on landscape, above it on portrait.
     const m2 = u.uMorph2.value;
     // Landscape: right third, clear of the headline. Scales with aspect so it never clips.
     const aspect = size.width / size.height;
     const halfW = 3.47 * aspect; // visible half-width at z=0 (camera z 11, fov 35)
     // Headline and copy sit top-left (landscape) / top (portrait), so the form lands low-right / low.
-    const hero = placement === "hero";
-    const band = hero && portrait ? s.formBand : undefined;
-    if (band && band.bottom > band.top) {
-      // Visible half-height at z = 0 for this camera (z 11, fov 35).
-      const halfH = 3.468;
-      const bandH = (band.bottom - band.top) * 2 * halfH;
-      u.uFormOffset.value.set(0, (0.5 - (band.top + band.bottom) / 2) * 2 * halfH, 0);
-      // The nib is ~3.3 units tall and ~3 wide; fit it with a margin.
-      u.uFormScale.value = MathUtils.clamp(Math.min((bandH * 0.86) / 3.3, (halfW * 1.7) / 3), 0.34, 0.95);
+    if (placement === "box") {
+      // Mobile hero: the form has its own box below the copy — centre it and fit both axes.
+      u.uFormOffset.value.set(0, m2 * 0.06, 0);
+      u.uFormScale.value = Math.min(1.7, (3.468 * 2 * 0.8) / 3.3, (halfW * 2 * 0.78) / 3.1);
     } else {
-      u.uFormOffset.value.set(
-        portrait ? 0 : halfW * (hero ? 0.555 : 0.64),
-        portrait ? (hero ? -2.3 : 1.9) + m2 * 0.1 : (hero ? -0.2 : 1.05) + m2 * 0.1,
-        0,
-      );
-      u.uFormScale.value = hero
-        ? portrait ? Math.min(0.62, halfW * 0.28) : Math.min(1.5, halfW * 0.27)
-        : (portrait ? Math.min(0.8, halfW * 0.3) : Math.min(1.05, halfW * 0.2)) * 0.82;
+      // Full stage: copy top-left (landscape) / top (portrait), form low-right / low.
+      u.uFormOffset.value.set(portrait ? 0 : halfW * 0.555, portrait ? -2.3 + m2 * 0.1 : -0.2 + m2 * 0.1, 0);
+      u.uFormScale.value = portrait ? Math.min(0.62, halfW * 0.28) : Math.min(1.5, halfW * 0.27);
     }
     const px = s.pointerActive ? s.pointer.x : 0;
     const py = s.pointerActive ? s.pointer.y : 0;

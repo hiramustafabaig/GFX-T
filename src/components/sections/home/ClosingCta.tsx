@@ -19,7 +19,7 @@ export function ClosingCta() {
       </div>
 
       <div className="container-page flex min-h-svh flex-col justify-end pb-12 pt-[36svh] md:pb-16 lg:pt-[42svh]">
-        <SectionLabel index="08" className="self-start">
+        <SectionLabel index="09" className="self-start">
           Your move
         </SectionLabel>
         <h2

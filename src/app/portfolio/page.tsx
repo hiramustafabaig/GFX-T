@@ -13,8 +13,8 @@ export const metadata: Metadata = {
 export default function PortfolioPage() {
   return (
     <>
-      <PageIntro index="04" eyebrow="Selected Work" title="Our Portfolio" lead={portfolioIntro} className="pb-16 md:pb-24" />
-      <section aria-label="Work" className="pb-[var(--spacing-section)]">
+      <PageIntro index="04" eyebrow="Selected work" title="Our Portfolio" lead={portfolioIntro} />
+      <section aria-label="Work" className="py-12 md:py-16">
         <PortfolioExhibition />
       </section>
       <NextChapter current="/portfolio" />

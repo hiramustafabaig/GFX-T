@@ -31,44 +31,64 @@ export function ContactForm() {
     setSent(true);
   };
 
-  const field = "peer w-full border-b border-ink-700 bg-transparent pb-3 pt-7 text-lead text-paper outline-none transition-colors placeholder:text-transparent focus:border-signal";
-  const label = "label pointer-events-none absolute left-0 top-0 text-ink-400 transition-colors peer-focus:text-signal";
+  const field =
+    "mt-2 block w-full border border-ink-700 bg-ink-950 px-4 py-3 text-base text-paper outline-none transition-colors placeholder:text-ink-500 hover:border-ink-500 focus:border-signal";
+  const label = "label text-ink-300";
 
   return (
-    <form onSubmit={send} className="grid gap-8 md:grid-cols-2" aria-describedby={`${id}-note`}>
-      <div className="relative">
-        <input id={`${id}-name`} name="name" required autoComplete="name" placeholder="Name" className={field} />
-        <label htmlFor={`${id}-name`} className={label}>Name *</label>
+    <form onSubmit={send} className="grid gap-5 md:grid-cols-2" aria-describedby={`${id}-note`}>
+      <div>
+        <label htmlFor={`${id}-name`} className={label}>
+          Name <span className="text-signal">*</span>
+        </label>
+        <input id={`${id}-name`} name="name" required autoComplete="name" placeholder="Your name" className={field} />
       </div>
-      <div className="relative">
-        <input id={`${id}-email`} name="email" type="email" required autoComplete="email" placeholder="Email" className={field} />
-        <label htmlFor={`${id}-email`} className={label}>Email *</label>
+      <div>
+        <label htmlFor={`${id}-email`} className={label}>
+          Email <span className="text-signal">*</span>
+        </label>
+        <input id={`${id}-email`} name="email" type="email" required autoComplete="email" placeholder="you@company.com" className={field} />
       </div>
-      <div className="relative">
-        <input id={`${id}-company`} name="company" autoComplete="organization" placeholder="Company" className={field} />
-        <label htmlFor={`${id}-company`} className={label}>Company / brand</label>
+      <div>
+        <label htmlFor={`${id}-company`} className={label}>
+          Company / brand
+        </label>
+        <input id={`${id}-company`} name="company" autoComplete="organization" placeholder="Optional" className={field} />
       </div>
-      <div className="relative">
-        <select id={`${id}-service`} name="service" defaultValue="" className={cn(field, "appearance-none [&>option]:bg-ink-900")}>
-          <option value="">Not sure yet</option>
-          {services.map((s) => (
-            <option key={s.slug} value={s.title}>{s.title}</option>
-          ))}
-        </select>
-        <label htmlFor={`${id}-service`} className={label}>Service</label>
-        <span aria-hidden className="pointer-events-none absolute bottom-4 right-0 text-ink-400">↓</span>
+      <div>
+        <label htmlFor={`${id}-service`} className={label}>
+          Service
+        </label>
+        <div className="relative">
+          <select id={`${id}-service`} name="service" defaultValue="" className={cn(field, "appearance-none pr-10 [&>option]:bg-ink-900")}>
+            <option value="">Not sure yet</option>
+            {services.map((s) => (
+              <option key={s.slug} value={s.title}>
+                {s.title}
+              </option>
+            ))}
+          </select>
+          <span aria-hidden className="pointer-events-none absolute bottom-3.5 right-4 text-ink-400">
+            ↓
+          </span>
+        </div>
       </div>
-      <div className="relative md:col-span-2">
-        <textarea id={`${id}-message`} name="message" required rows={4} placeholder="Message" className={cn(field, "resize-y")} />
-        <label htmlFor={`${id}-message`} className={label}>Tell us about your project *</label>
+      <div className="md:col-span-2">
+        <label htmlFor={`${id}-message`} className={label}>
+          Tell us about your project <span className="text-signal">*</span>
+        </label>
+        <textarea id={`${id}-message`} name="message" required rows={5} placeholder="Goals, timeline, anything we should know" className={cn(field, "resize-y")} />
       </div>
       <div className="flex flex-col gap-4 md:col-span-2 md:flex-row md:items-center md:justify-between">
-        <p id={`${id}-note`} className="label text-ink-400" aria-live="polite">
+        <p id={`${id}-note`} className="text-sm text-ink-400" aria-live="polite">
           {sent ? "Your email app should now be open with the message ready to send." : `Opens your email app, addressed to ${contact.email}.`}
         </p>
-        <button type="submit" className="group label inline-flex h-12 items-center gap-4 bg-signal pl-5 pr-4 text-ink-950 transition-colors hover:bg-paper">
+        <button
+          type="submit"
+          className="label inline-flex h-12 items-center justify-center gap-3 bg-signal px-6 font-medium text-ink-950 transition-colors hover:bg-paper"
+        >
           Compose email
-          <span aria-hidden className="size-1.5 bg-current" />
+          <span aria-hidden>→</span>
         </button>
       </div>
     </form>

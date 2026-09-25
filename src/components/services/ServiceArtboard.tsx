@@ -44,7 +44,7 @@ export function ServiceArtboard({ service }: { service: Service }) {
       aria-labelledby={`${service.slug}-title`}
       onPointerEnter={select}
       onPointerLeave={() => setSelected(false)}
-      className="group relative flex min-h-[26rem] scroll-mt-24 flex-col p-6 md:min-h-[32rem] md:p-10"
+      className="group relative flex h-full scroll-mt-28 flex-col p-6 md:p-8"
     >
       <div
         aria-hidden
@@ -61,21 +61,21 @@ export function ServiceArtboard({ service }: { service: Service }) {
         </span>
       </div>
 
-      <div className="relative flex flex-1 items-center py-10">
-        <ServiceGlyph glyph={service.glyph} play={inView} replayKey={replay} className="size-24 md:size-32" />
+      <div className="relative py-8">
+        <ServiceGlyph glyph={service.glyph} play={inView} replayKey={replay} className="size-16 md:size-20" />
       </div>
 
       <div className="relative">
         <h2
           id={`${service.slug}-title`}
           className={cn(
-            "font-display text-h3 font-semibold uppercase transition-[font-variation-settings] duration-700",
+            "font-display text-xl font-extrabold uppercase leading-tight transition-[font-variation-settings] duration-700 md:text-2xl",
             selected ? "[font-variation-settings:'wdth'_112]" : "[font-variation-settings:'wdth'_100]",
           )}
         >
           {service.title}
         </h2>
-        <p className="mt-4 max-w-md text-paper/75">{service.description}</p>
+        <p className="mt-3 text-[0.9375rem] leading-relaxed text-paper/75">{service.description}</p>
       </div>
     </article>
   );
