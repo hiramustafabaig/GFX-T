@@ -2,6 +2,7 @@ import { navigation } from "@/data/navigation";
 import { contact, site } from "@/lib/site";
 import { TransitionLink } from "@/components/transitions/TransitionLink";
 import { Logo } from "@/components/brand/Logo";
+import { BackToTop, StudioTime } from "./FooterMeta";
 
 export function Footer() {
   return (
@@ -43,11 +44,15 @@ export function Footer() {
         </address>
       </div>
 
-      <div className="container-page label mt-16 flex flex-col justify-between gap-2 text-ink-500 sm:flex-row">
+      <div className="container-page label mt-16 flex flex-col justify-between gap-3 border-t border-ink-800 pt-6 text-ink-500 md:flex-row md:items-center">
         <p>
           © {new Date().getFullYear()} {site.name}. All rights reserved.
         </p>
-        <p>Lahore, Pakistan — Since {site.founded}</p>
+        <p className="flex flex-wrap items-center gap-x-6 gap-y-2">
+          <StudioTime />
+          <span>Since {site.founded}</span>
+          <BackToTop />
+        </p>
       </div>
     </footer>
   );

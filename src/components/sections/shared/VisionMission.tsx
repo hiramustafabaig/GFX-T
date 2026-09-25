@@ -166,7 +166,7 @@ export function VisionMission({ detail = "summary", index }: Props) {
           {/* Sticky diagram (large screens) */}
           <div className="hidden lg:col-span-5 lg:block">
             <div className="sticky top-[calc(var(--header-h)+8vh)]">
-              <Diagram mode={mode} className="max-w-[440px]" />
+              <Diagram mode={mode} className="max-w-[440px] 2xl:max-w-[560px]" />
               <p className="label mt-8 flex gap-6 text-ink-400" aria-hidden>
                 <span className={cn("transition-colors duration-500", mode === "vision" && "text-paper")}>
                   <span className={mode === "vision" ? "text-signal" : ""}>■</span> Possibility

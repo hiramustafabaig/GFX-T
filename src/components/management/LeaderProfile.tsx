@@ -45,14 +45,14 @@ export function LeaderProfile({ leader, index }: { leader: Leader; index: number
       aria-labelledby={`${leader.slug}-name`}
       className={cn("py-[var(--spacing-section)]", paper ? "bg-paper text-ink-950" : "bg-ink-950 text-paper")}
     >
-      <div className="container-page grid gap-12 lg:grid-cols-12 lg:gap-x-10">
-        <figure className={cn("lg:col-span-5", flip && "lg:order-2 lg:col-start-8")}>
+      <div className="container-page grid gap-12 md:grid-cols-12 md:gap-x-8 lg:gap-x-10">
+        <figure className={cn("md:sticky md:top-[calc(var(--header-h)+2rem)] md:col-span-5 md:self-start", flip && "md:order-2 md:col-start-8")}>
           <div data-portrait className="relative aspect-[4/5] overflow-hidden bg-ink-850">
             <Image
               src={leader.portrait.src}
               alt={leader.portrait.alt}
               fill
-              sizes="(max-width: 1024px) 100vw, 42vw"
+              sizes="(max-width: 768px) 100vw, 42vw"
               className="object-cover"
             />
           </div>
@@ -62,7 +62,7 @@ export function LeaderProfile({ leader, index }: { leader: Leader; index: number
           </figcaption>
         </figure>
 
-        <div className={cn("flex flex-col lg:col-span-6", flip ? "lg:order-1 lg:col-start-1" : "lg:col-start-7")}>
+        <div className={cn("flex flex-col md:col-span-7 lg:col-span-6", flip ? "md:order-1 md:col-start-1" : "md:col-start-6 lg:col-start-7")}>
           <p className={cn("label flex items-center gap-3", paper ? "text-ink-700" : "text-ink-300")}>
             <span className={cn("size-2", paper ? "bg-ink-950" : "bg-signal")} aria-hidden />
             {leader.role}

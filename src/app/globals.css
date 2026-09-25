@@ -196,3 +196,14 @@ html.lenis body {
     animation: none !important;
   }
 }
+
+/* Page-intro scroll cue: a short signal stroke travelling along a hairline. */
+@keyframes scroll-cue {
+  0% {
+    transform: translateX(-100%);
+  }
+  60%,
+  100% {
+    transform: translateX(100%);
+  }
+}

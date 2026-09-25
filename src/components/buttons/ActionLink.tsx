@@ -1,6 +1,9 @@
-import type { ReactNode } from "react";
+"use client";
+
+import { useRef, type ReactNode } from "react";
 import { TransitionLink } from "@/components/transitions/TransitionLink";
 import { cn } from "@/lib/cn";
+import { useMagnetic } from "@/lib/useMagnetic";
 
 type Props = {
   href: string;
@@ -15,9 +18,11 @@ type Props = {
 /**
  * The site's single button language: a mono label beside an anchor square that turns into
  * an arrow on hover. Internal links run through the page transition; mailto/tel/external
- * links render as plain anchors.
+ * links render as plain anchors. On fine pointers the control leans toward the cursor.
  */
 export function ActionLink({ href, children, variant = "ghost", tone = "ink", className }: Props) {
+  const magnetRef = useRef<HTMLSpanElement>(null);
+  useMagnetic(magnetRef, 0.2);
   const classes = cn(
     "group label inline-flex h-12 items-center gap-4 pl-5 pr-4 transition-colors duration-300",
     variant === "primary"
@@ -47,7 +52,7 @@ export function ActionLink({ href, children, variant = "ghost", tone = "ink", cl
   );
 
   const isInternal = href.startsWith("/");
-  return isInternal ? (
+  const link = isInternal ? (
     <TransitionLink href={href} className={classes}>
       {content}
     </TransitionLink>
@@ -55,5 +60,10 @@ export function ActionLink({ href, children, variant = "ghost", tone = "ink", cl
     <a href={href} className={classes}>
       {content}
     </a>
+  );
+  return (
+    <span ref={magnetRef} className="inline-block">
+      {link}
+    </span>
   );
 }
