@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { PageIntro } from "@/components/layout/PageIntro";
-import { NextChapter } from "@/components/layout/NextChapter";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { contactIntro } from "@/data/company";
@@ -27,7 +26,7 @@ export default function ContactPage() {
           </h2>
 
           <address className="mt-8 grid gap-3 not-italic">
-            <div className="border border-ink-800 bg-ink-900 p-5">
+            <div data-reveal className="border border-ink-800 bg-ink-900 p-5">
               <p className="label text-ink-400">Email</p>
               <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
                 <a href={mailto()} className="break-all text-xl font-medium text-paper transition-colors hover:text-signal">
@@ -37,7 +36,7 @@ export default function ContactPage() {
               </div>
             </div>
 
-            <div className="border border-ink-800 bg-ink-900 p-5">
+            <div data-reveal className="border border-ink-800 bg-ink-900 p-5">
               <p className="label text-ink-400">Phone</p>
               <ul className="mt-2 space-y-2">
                 {contact.phones.map((p) => (
@@ -51,7 +50,7 @@ export default function ContactPage() {
               </ul>
             </div>
 
-            <div className="border border-ink-800 bg-ink-900 p-5">
+            <div data-reveal className="border border-ink-800 bg-ink-900 p-5">
               <p className="label text-ink-400">Studio</p>
               <p className="mt-2 text-lg font-medium text-paper">{contact.address.full}</p>
               <a href={mapsHref} target="_blank" rel="noopener noreferrer" className="label mt-3 inline-flex items-center gap-2 text-ink-300 hover:text-signal">
@@ -63,7 +62,7 @@ export default function ContactPage() {
 
         {/* Form */}
         <div className="lg:col-span-7">
-          <div className="border border-ink-700 bg-ink-900 p-6 md:p-8">
+          <div data-reveal className="border border-ink-700 bg-ink-900 p-6 md:p-8">
             <p className="label text-signal">Start a project</p>
             <h2 id="brief-heading" className="mt-2 font-display text-2xl font-extrabold uppercase md:text-3xl">
               Send us a brief
@@ -75,7 +74,6 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <NextChapter current="/contact" />
     </>
   );
 }

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { PageIntro } from "@/components/layout/PageIntro";
-import { NextChapter } from "@/components/layout/NextChapter";
 import { ServiceArtboard } from "@/components/services/ServiceArtboard";
 import { ActionLink } from "@/components/buttons/ActionLink";
 import { services, servicesIntro } from "@/data/services";
@@ -38,7 +37,7 @@ export default function ServicesPage() {
       <section aria-label="Services" className="container-page py-12 md:py-16">
         <div className="grid border-l border-t border-ink-800 md:grid-cols-2 xl:grid-cols-3">
           {services.map((s) => (
-            <div key={s.slug} className="border-b border-r border-ink-800">
+            <div key={s.slug} data-reveal className="border-b border-r border-ink-800">
               <ServiceArtboard service={s} />
             </div>
           ))}
@@ -46,7 +45,7 @@ export default function ServicesPage() {
       </section>
 
       <section aria-labelledby="services-cta" className="container-page pb-16 md:pb-24">
-        <div className="flex flex-col gap-8 border border-ink-800 bg-ink-900 p-6 md:flex-row md:items-center md:justify-between md:p-10">
+        <div data-reveal className="flex flex-col gap-8 border border-ink-800 bg-ink-900 p-6 md:flex-row md:items-center md:justify-between md:p-10">
           <div>
             <p className="label text-signal">Next step</p>
             <h2 id="services-cta" className="mt-3 font-display text-[clamp(1.5rem,1rem+1.8vw,2.5rem)] font-extrabold uppercase leading-tight">
@@ -62,7 +61,6 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <NextChapter current="/services" />
     </>
   );
 }

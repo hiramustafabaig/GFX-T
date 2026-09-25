@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { PageIntro } from "@/components/layout/PageIntro";
-import { NextChapter } from "@/components/layout/NextChapter";
 import { SectionLabel } from "@/components/typography/SectionLabel";
 import { SectionHeading } from "@/components/typography/SectionHeading";
 import { Leadership } from "@/components/sections/shared/Leadership";
@@ -25,7 +24,7 @@ const aboutServices = ["Branding", "Social Media Management", "Digital Marketing
 
 function Principles({ title, items, accent }: { title: string; items: Principle[]; accent?: boolean }) {
   return (
-    <article className={accent ? "bg-signal p-6 text-ink-950 md:p-8" : "border border-ink-800 bg-ink-900 p-6 md:p-8"}>
+    <article data-reveal className={accent ? "bg-signal p-6 text-ink-950 md:p-8" : "border border-ink-800 bg-ink-900 p-6 md:p-8"}>
       <h3 className="font-display text-[clamp(1.5rem,1.1rem+1.4vw,2.25rem)] font-extrabold uppercase leading-none">{title}</h3>
       <ol className="mt-6 space-y-5">
         {items.map((p) => (
@@ -51,7 +50,7 @@ export default function AboutPage() {
 
       {/* Story: facts on the left, the two paragraphs on the right, one shared top edge. */}
       <section aria-labelledby="story-heading" className="container-page grid gap-10 py-12 md:py-16 lg:grid-cols-12 lg:gap-12">
-        <aside className="lg:col-span-4">
+        <aside data-reveal className="lg:col-span-4">
           <dl className="grid gap-px border border-ink-800 bg-ink-800">
             <div className="bg-ink-950 p-5">
               <dt className="label text-ink-400">Founded</dt>
@@ -81,7 +80,7 @@ export default function AboutPage() {
           </SectionLabel>
           <p className="mt-6 text-lead text-paper/90">{origin}</p>
 
-          <blockquote className="mt-10 border-l-4 border-signal pl-6">
+          <blockquote data-reveal className="mt-10 border-l-4 border-signal pl-6">
             <p className="font-display text-[clamp(1.4rem,1rem+1.5vw,2.25rem)] font-extrabold uppercase leading-tight">{belief}</p>
           </blockquote>
           <p className="mt-6 text-paper/80">{philosophyRest}</p>
@@ -104,7 +103,6 @@ export default function AboutPage() {
 
       <Leadership index="03" compact />
 
-      <NextChapter current="/about" />
     </>
   );
 }

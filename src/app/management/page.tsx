@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { PageIntro } from "@/components/layout/PageIntro";
-import { NextChapter } from "@/components/layout/NextChapter";
 import { LeaderProfile } from "@/components/management/LeaderProfile";
 import { leaders, managementHeading } from "@/data/management";
 
@@ -31,7 +30,6 @@ export default function ManagementPage() {
       {leaders.map((l, i) => (
         <LeaderProfile key={l.slug} leader={l} index={i} />
       ))}
-      <NextChapter current="/management" />
     </>
   );
 }

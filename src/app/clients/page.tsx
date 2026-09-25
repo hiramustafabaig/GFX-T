@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { PageIntro } from "@/components/layout/PageIntro";
-import { NextChapter } from "@/components/layout/NextChapter";
 import { ClientsUniverse } from "@/components/clients/ClientsUniverse";
 import { clientsTeaser } from "@/data/company";
 
@@ -19,7 +18,6 @@ export default function ClientsPage() {
           <ClientsUniverse />
         </div>
       </section>
-      <NextChapter current="/clients" />
     </>
   );
 }

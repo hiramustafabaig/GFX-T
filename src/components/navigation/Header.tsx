@@ -48,7 +48,9 @@ export function Header() {
       <header
         className={cn(
           // Always present. Transparent over the hero; frosted glass once the page scrolls.
-          "fixed inset-x-0 top-0 z-[var(--z-header)] border-b transition-[background-color,border-color,backdrop-filter] duration-500",
+          // While the menu is open the header sits above it, so the ✕ replaces the hamburger in place.
+          "fixed inset-x-0 top-0 border-b transition-[background-color,border-color,backdrop-filter] duration-500",
+          menuOpen ? "z-[calc(var(--z-menu)+1)]" : "z-[var(--z-header)]",
           scrolled && !menuOpen
             ? "border-paper/10 bg-ink-950/75 backdrop-blur-xl backdrop-saturate-150"
             : "border-transparent bg-transparent",

@@ -76,7 +76,7 @@ export function WhyChooseUs() {
             </span>
           </h2>
 
-          <div className="relative mt-10 bg-paper p-6 text-ink-950 md:mt-14 md:p-9">
+          <div data-reveal className="relative mt-10 bg-paper p-6 text-ink-950 md:mt-14 md:p-9">
             <span aria-hidden className="absolute left-0 top-0 h-full w-1.5 bg-signal" />
             <p
               data-statement
