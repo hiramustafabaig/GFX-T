@@ -7,6 +7,7 @@ import { TransitionProvider } from "@/components/transitions/TransitionProvider"
 import { Header } from "@/components/navigation/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Cursor } from "@/components/ui/Cursor";
+import { ScrollReveal } from "@/components/providers/ScrollReveal";
 
 // Archivo's width axis ("wdth" 62–125) is used expressively: headlines widen on the "Elevate" beat.
 const archivo = Archivo({
@@ -93,6 +94,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             </main>
             <Footer />
             <Cursor />
+            <ScrollReveal />
           </TransitionProvider>
         </SmoothScroll>
       </body>

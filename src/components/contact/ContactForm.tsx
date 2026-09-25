@@ -4,6 +4,7 @@ import { useId, useState, type FormEvent } from "react";
 import { services } from "@/data/services";
 import { contact } from "@/lib/site";
 import { cn } from "@/lib/cn";
+import { Select } from "@/components/ui/Select";
 
 /**
  * Project brief form. There is no mail backend yet, so submitting composes the message in the
@@ -56,22 +57,14 @@ export function ContactForm() {
         <input id={`${id}-company`} name="company" autoComplete="organization" placeholder="Optional" className={field} />
       </div>
       <div>
-        <label htmlFor={`${id}-service`} className={label}>
+        <p id={`${id}-service-label`} className={label}>
           Service
-        </label>
-        <div className="relative">
-          <select id={`${id}-service`} name="service" defaultValue="" className={cn(field, "appearance-none pr-10 [&>option]:bg-ink-900")}>
-            <option value="">Not sure yet</option>
-            {services.map((s) => (
-              <option key={s.slug} value={s.title}>
-                {s.title}
-              </option>
-            ))}
-          </select>
-          <span aria-hidden className="pointer-events-none absolute bottom-3.5 right-4 text-ink-400">
-            ↓
-          </span>
-        </div>
+        </p>
+        <Select
+          labelId={`${id}-service-label`}
+          name="service"
+          options={[{ value: "", label: "Not sure yet" }, ...services.map((s) => ({ value: s.title, label: s.title }))]}
+        />
       </div>
       <div className="md:col-span-2">
         <label htmlFor={`${id}-message`} className={label}>

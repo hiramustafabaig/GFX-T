@@ -40,7 +40,7 @@ const MARKED: Record<Layout, number[]> = { seed: [], vision: [3, 7], mission: [2
 /** Line i runs from its source to anchor i: rays from the origin, or segments along the path. */
 const source = (mode: Layout, i: number) => (mode === "mission" ? LAYOUT.mission[Math.max(0, i - 1)] : LAYOUT[mode][0]);
 
-function Diagram({ mode, className }: { mode: Layout; className?: string }) {
+function Diagram({ mode, className, viewBox = "0 0 400 400" }: { mode: Layout; className?: string; viewBox?: string }) {
   const ref = useRef<SVGSVGElement>(null);
   const reduced = useReducedMotion();
   const first = useRef(true);
@@ -70,7 +70,7 @@ function Diagram({ mode, className }: { mode: Layout; className?: string }) {
 
   // Initial attributes are the vision layout; the effect above snaps them to `mode` on mount.
   return (
-    <svg ref={ref} viewBox="0 0 400 400" aria-hidden className={cn("w-full overflow-visible", className)}>
+    <svg ref={ref} viewBox={viewBox} aria-hidden className={cn("w-full overflow-visible", className)}>
       {LAYOUT.vision.map((p, i) =>
         i === 0 ? null : (
           <line
@@ -156,7 +156,8 @@ function InViewDiagram({ mode, className }: { mode: Mode; className?: string }) 
   }, []);
   return (
     <div ref={ref} className={className}>
-      <Diagram mode={inView ? mode : "seed"} />
+      {/* Mission is a single horizontal path, so its box is cropped to that band. */}
+      <Diagram mode={inView ? mode : "seed"} viewBox={mode === "mission" ? "0 150 400 90" : undefined} />
     </div>
   );
 }
@@ -217,11 +218,11 @@ export function VisionMission({ index }: Props) {
                 data-block={b.id}
                 aria-labelledby={`${b.id}-heading`}
                 className={cn(
-                  "flex flex-col py-12 lg:py-14",
+                  "flex flex-col py-7 lg:py-14",
                   b.id === "mission" && "border-t border-ink-800 lg:border-0",
                 )}
               >
-                <InViewDiagram mode={b.id} className="mb-10 max-w-[300px] lg:hidden" />
+                <InViewDiagram mode={b.id} className={cn("mb-5 lg:hidden", b.id === "mission" ? "max-w-[320px]" : "max-w-[210px]")} />
                 <RevealText
                   as="h2"
                   id={`${b.id}-heading`}
@@ -235,8 +236,8 @@ export function VisionMission({ index }: Props) {
                   {b.title}
                 </RevealText>
 
-                <p className="mt-8 max-w-2xl text-lead text-paper/85">{b.summary}</p>
-                <ol className="mt-10 flex flex-wrap gap-x-8 gap-y-3">
+                <p className="mt-5 max-w-2xl text-lead text-paper/85 lg:mt-8">{b.summary}</p>
+                <ol className="mt-6 flex flex-wrap gap-x-8 gap-y-3 lg:mt-10">
                   {b.principles.map((p) => (
                     <li key={p.index} className="label flex items-center gap-2 text-ink-300">
                       <span className="text-signal">{p.index}</span> {p.title}

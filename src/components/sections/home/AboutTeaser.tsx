@@ -34,7 +34,7 @@ export function AboutTeaser() {
             {/* Facts under the year, all taken from the company documents. */}
             <dl className="mt-10 grid gap-px bg-ink-800 sm:grid-cols-3">
               {facts.map((f) => (
-                <div key={f.term} className="group bg-ink-950 p-5 transition-colors duration-500 hover:bg-ink-900">
+                <div key={f.term} data-reveal className="group bg-ink-950 p-5 transition-colors duration-500 hover:bg-ink-900">
                   <dt className="label flex items-center gap-2 text-ink-400">
                     <span aria-hidden className="size-1.5 bg-signal transition-transform duration-500 group-hover:rotate-45" />
                     {f.term}

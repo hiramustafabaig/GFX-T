@@ -1,18 +1,17 @@
 import Image from "next/image";
 import { leaders } from "@/data/management";
-import { TransitionLink } from "@/components/transitions/TransitionLink";
 import { ActionLink } from "@/components/buttons/ActionLink";
 import { SectionHeading } from "@/components/typography/SectionHeading";
 import { SectionLabel } from "@/components/typography/SectionLabel";
 import { cn } from "@/lib/cn";
 
 /**
- * LEADERSHIP — the CEO and COO as two portrait cards (photos shown as supplied: no crop tricks,
- * no filters). Each card links to the full profile on the Management page.
+ * LEADERSHIP — the CEO and COO as two portrait cards (photos shown as supplied: no filters).
+ * The cards are not links; the one "Meet our CEO & COO" button leads to the full profiles.
  */
 export function Leadership({ index, compact, className }: { index: string; compact?: boolean; className?: string }) {
   return (
-    <section aria-labelledby="leadership-heading" className={cn("bg-ink-900", compact ? "py-12 md:py-16" : "py-[var(--spacing-section)]", className)}>
+    <section aria-labelledby="leadership-heading" className={cn("bg-ink-900", compact ? "py-12 md:py-16" : "py-16 md:py-24", className)}>
       <div className="container-page">
         <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <div>
@@ -28,28 +27,18 @@ export function Leadership({ index, compact, className }: { index: string; compa
           </div>
         </div>
 
-        <ul className="mt-12 grid gap-4 sm:grid-cols-2 md:mt-16 md:gap-6">
+        <ul className="mt-10 grid max-w-4xl gap-4 sm:grid-cols-2 md:mt-12 md:gap-6">
           {leaders.map((l) => (
             <li key={l.slug}>
-              <TransitionLink
-                href={`/management#${l.slug}`}
-                data-cursor="view"
-                className="group relative block overflow-hidden border border-ink-800 bg-ink-900 transition-colors duration-500 hover:border-signal"
-              >
+              <div data-reveal className="relative overflow-hidden border border-ink-800 bg-ink-900">
                 <span className="relative block aspect-[4/5] overflow-hidden">
-                  <Image
-                    src={l.portrait.src}
-                    alt={l.portrait.alt}
-                    fill
-                    sizes="(max-width: 640px) 100vw, 45vw"
-                    className="object-cover object-top transition-transform duration-[1200ms] ease-[var(--ease-out-expo)] group-hover:scale-[1.03]"
-                  />
+                  <Image src={l.portrait.src} alt={l.portrait.alt} fill sizes="(max-width: 640px) 100vw, 440px" className="object-cover object-top" />
                   <span aria-hidden className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-ink-950/90 to-transparent" />
                   <span className="label absolute left-4 top-4 bg-signal px-2.5 py-1.5 font-medium text-ink-950">{l.role}</span>
                 </span>
-                <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 md:p-6">
+                <span className="absolute inset-x-0 bottom-0 block p-4 md:p-5">
                   <span>
-                    <span className="block font-display text-[clamp(1.25rem,0.9rem+1.2vw,2rem)] font-extrabold uppercase leading-tight text-paper">
+                    <span className="block font-display text-[clamp(1.1rem,0.9rem+0.8vw,1.5rem)] font-extrabold uppercase leading-tight text-paper">
                       {l.name}
                     </span>
                     <span className="mt-2 block text-sm text-paper/80">
@@ -57,11 +46,8 @@ export function Leadership({ index, compact, className }: { index: string; compa
                       {l.reach.length > 0 && <> · {l.reach.join(", ")}</>}
                     </span>
                   </span>
-                  <span aria-hidden className="grid size-10 shrink-0 place-items-center bg-signal text-ink-950 transition-transform duration-500 group-hover:rotate-45">
-                    ↗
-                  </span>
                 </span>
-              </TransitionLink>
+              </div>
             </li>
           ))}
         </ul>

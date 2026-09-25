@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { PageIntro } from "@/components/layout/PageIntro";
-import { NextChapter } from "@/components/layout/NextChapter";
 import { PortfolioExhibition } from "@/components/portfolio/PortfolioExhibition";
 import { portfolioIntro } from "@/data/portfolio";
 
@@ -17,7 +16,6 @@ export default function PortfolioPage() {
       <section aria-label="Work" className="py-12 md:py-16">
         <PortfolioExhibition />
       </section>
-      <NextChapter current="/portfolio" />
     </>
   );
 }
