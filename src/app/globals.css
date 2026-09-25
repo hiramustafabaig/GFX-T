@@ -14,7 +14,7 @@
   --color-ink-850: #1f1f1f;
   --color-ink-800: #262626;
   --color-ink-700: #3a3a3a;
-  --color-ink-500: #6b6b6b;
+  --color-ink-500: #828280; /* lightest grey allowed for small text on ink (≥4.5:1) */
   --color-ink-400: #8f8f8c;
   --color-ink-300: #b4b1aa;
   --color-paper: #f3f0e8;
@@ -157,6 +157,18 @@ html.lenis body {
   overflow: clip;
   padding-bottom: 0.1em;
   margin-bottom: -0.1em;
+}
+
+/* ==========================================================================
+   Increased contrast (OS setting): lift secondary greys and hairlines.
+   ========================================================================== */
+@media (prefers-contrast: more) {
+  :root {
+    --color-ink-400: #c9c6bf;
+    --color-ink-500: #b4b1aa;
+    --color-ink-700: #6b6b6b;
+    --color-ink-800: #555555;
+  }
 }
 
 /* ==========================================================================

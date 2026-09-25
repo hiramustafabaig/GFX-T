@@ -7,7 +7,10 @@ type Props = {
   /** Surface the mark sits on. */
   surface?: "ink" | "paper";
   className?: string;
-  /** Rendered height of a logo image, in px. */
+  /**
+   * Largest rendered height of a logo, in px. Logos are sized to a constant visual area
+   * (optical balancing), so wide wordmarks come out shorter than compact marks.
+   */
   logoHeight?: number;
   /** Let long names wrap (grid tiles); marquees keep them on one line. */
   wrap?: boolean;
@@ -22,6 +25,9 @@ export function ClientMark({ client, surface = "ink", className, logoHeight = 40
   if (logo) {
     // Single-colour logos are shown monochrome so the wall reads as one system.
     const invert = (surface === "ink" && logo.tone === "dark") || (surface === "paper" && logo.tone === "light");
+    // Equal area: a square mark gets ~80% of the max height, a 5:1 wordmark about 40%.
+    const aspect = logo.width / logo.height;
+    const height = Math.round(Math.min(logoHeight, (logoHeight * 0.8) / Math.sqrt(Math.max(aspect, 0.4))));
     return (
       <Image
         src={logo.src}
@@ -29,7 +35,7 @@ export function ClientMark({ client, surface = "ink", className, logoHeight = 40
         height={logo.height}
         alt={client.name}
         sizes="240px"
-        style={{ height: logoHeight, width: "auto" }}
+        style={{ height, width: "auto" }}
         className={cn("max-w-full object-contain", invert && "invert", className)}
       />
     );

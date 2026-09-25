@@ -56,7 +56,7 @@ export function ServicesTeaser() {
                   onBlur={() => setActive(null)}
                   className="group grid grid-cols-[2.5rem_1fr_auto] items-center gap-4 py-5 md:grid-cols-[5rem_1fr_auto] md:py-7"
                 >
-                  <span className={cn("label transition-colors duration-300", on ? "text-ink-950" : "text-ink-500")}>
+                  <span className={cn("label transition-colors duration-300", on ? "text-ink-950" : "text-ink-700")}>
                     {s.index}
                   </span>
                   <span

@@ -92,10 +92,12 @@ export function ProjectViewer({ projects, index, onChange }: Props) {
       <div ref={scrollRef} data-lenis-prevent className="flex-1 overflow-y-auto overscroll-contain">
         <div className="container-page grid gap-10 py-10 lg:grid-cols-12">
           <dl className="label grid h-fit gap-5 text-ink-400 lg:sticky lg:top-10 lg:col-span-3">
-            <div>
-              <dt>Client</dt>
-              <dd className="mt-1 text-paper">{project.clientName}</dd>
-            </div>
+            {project.clientName && (
+              <div>
+                <dt>Client</dt>
+                <dd className="mt-1 text-paper">{project.clientName}</dd>
+              </div>
+            )}
             <div>
               <dt>Category</dt>
               <dd className="mt-1 text-paper">{category}</dd>
@@ -116,7 +118,9 @@ export function ProjectViewer({ projects, index, onChange }: Props) {
                 height={m.height}
                 alt={m.alt}
                 sizes="(max-width: 1024px) 100vw, 70vw"
-                className="h-auto w-full"
+                // Never enlarge a piece far beyond its native size — preview files stay crisp.
+                style={{ maxWidth: Math.min(m.width * 2, 1600) }}
+                className="mx-auto h-auto w-full"
               />
             ))}
           </div>

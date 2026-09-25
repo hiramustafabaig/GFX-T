@@ -19,7 +19,7 @@ export function ClosingCta() {
       </div>
 
       <div className="container-page flex min-h-svh flex-col justify-end pb-12 pt-[40svh] md:pb-16 lg:pt-[var(--spacing-section)]">
-        <SectionLabel index="07">Your move</SectionLabel>
+        <SectionLabel index="08">Your move</SectionLabel>
         <h2
           id="closing-heading"
           className="mt-8 font-display text-[clamp(3rem,11vw,12rem)] font-bold uppercase leading-[0.86] tracking-[-0.03em]"

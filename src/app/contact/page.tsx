@@ -4,6 +4,7 @@ import { ContactForm } from "@/components/contact/ContactForm";
 import { SectionLabel } from "@/components/typography/SectionLabel";
 import { RevealText } from "@/components/typography/RevealText";
 import { FormStage } from "@/three/FormStage";
+import { CopyButton } from "@/components/ui/CopyButton";
 import { contactIntro } from "@/data/company";
 import { contact, mailto } from "@/lib/site";
 
@@ -55,6 +56,7 @@ export default function ContactPage() {
               <a href={mailto()} className="mt-3 block break-all font-display text-h2 font-bold leading-none tracking-[-0.02em] transition-colors hover:text-signal">
                 {contact.email}
               </a>
+              <CopyButton value={contact.email} label="Copy email" className="mt-6" />
             </div>
             <div className="lg:col-span-3">
               <p className="label text-ink-400">Phone</p>

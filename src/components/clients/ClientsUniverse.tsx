@@ -57,13 +57,13 @@ export function ClientsUniverse() {
 
   return (
     <div>
-      <FilterChips label="Filter clients by industry" options={filters} value={filter} onChange={choose} />
+      <FilterChips label="Filter clients by industry" options={filters} value={filter} onChange={choose} tone="paper" />
 
       <p className="sr-only" aria-live="polite">
         Showing {filter === "all" ? "all clients" : `${labelFor(filter)} clients`}
       </p>
 
-      <ul ref={gridRef} className="mt-10 grid grid-cols-2 border-l border-t border-ink-800 lg:grid-cols-3 2xl:grid-cols-4">
+      <ul ref={gridRef} className="mt-10 grid grid-cols-2 border-l border-t border-ink-950/15 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6">
         {clients.map((c, i) => {
           const shown = filter === "all" || c.category === filter;
           return (
@@ -71,18 +71,25 @@ export function ClientsUniverse() {
               key={c.slug}
               data-flip-id={c.slug}
               hidden={!shown}
-              className="group relative flex min-h-36 flex-col justify-between gap-6 border-b border-r border-ink-800 p-4 md:min-h-56 md:p-7"
+              className="group relative flex aspect-square flex-col justify-between border-b border-r border-ink-950/15 p-4 md:p-5"
             >
-              <SelectionBox visible={false} className="inset-0 group-hover:opacity-100" />
-              <div className="label flex justify-between gap-2 text-ink-500">
+              <SelectionBox visible={false} tone="ink" className="inset-0 group-hover:opacity-100" />
+              <div className="label flex justify-between gap-2 text-ink-700">
                 <span>{String(i + 1).padStart(2, "0")}</span>
-                <span className="transition-colors duration-300 group-hover:text-signal">{labelFor(c.category)}</span>
+                <span>{labelFor(c.category)}</span>
               </div>
-              <ClientMark
-                client={c}
-                wrap
-                className="text-[clamp(1.05rem,0.8rem+1.2vw,2.1rem)] leading-none text-paper [font-variation-settings:'wdth'_100] transition-[font-variation-settings] duration-500 group-hover:[font-variation-settings:'wdth'_116]"
-              />
+              <div className="flex flex-1 items-center justify-center py-3">
+                <ClientMark
+                  client={c}
+                  surface="paper"
+                  wrap
+                  logoHeight={120}
+                  className="max-h-[120px] text-center text-[clamp(1.05rem,0.8rem+1.2vw,1.8rem)] leading-none text-ink-950 grayscale opacity-80 transition-[filter,opacity] duration-500 group-hover:opacity-100 group-hover:grayscale-0"
+                />
+              </div>
+              <p aria-hidden={!!c.logo} className="label truncate text-ink-950">
+                {c.name}
+              </p>
             </li>
           );
         })}

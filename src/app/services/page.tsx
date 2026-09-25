@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 export default function ServicesPage() {
   return (
     <>
-      <PageIntro index="03" eyebrow="Our Services" title={servicesTeaser.heading} lead={servicesIntro}>
+      <PageIntro index="03" eyebrow="Our Services" title="Our Services" lead={servicesIntro}>
         {/* Index: the whole offer is readable before any scrolling. */}
         <nav aria-label="Services index" className="mt-16 md:ml-[33%]">
           <ol className="grid gap-x-10 gap-y-2 sm:grid-cols-2">

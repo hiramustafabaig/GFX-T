@@ -14,8 +14,10 @@ export default function ClientsPage() {
   return (
     <>
       <PageIntro index="05" eyebrow="Clients" title={clientsTeaser.heading} lead={clientsTeaser.body} className="pb-16 md:pb-24" />
-      <section aria-label="Client list" className="container-page pb-[var(--spacing-section)]">
-        <ClientsUniverse />
+      <section aria-label="Client list" className="bg-paper py-16 text-ink-950 md:py-24">
+        <div className="container-page">
+          <ClientsUniverse />
+        </div>
       </section>
       <NextChapter current="/clients" />
     </>

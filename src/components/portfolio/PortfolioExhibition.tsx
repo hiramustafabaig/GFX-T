@@ -2,10 +2,13 @@
 
 import Image from "next/image";
 import { useRef, useState } from "react";
-import { portfolio, portfolioCategories, type PortfolioCategory, type PortfolioProject } from "@/data/portfolio";
-import { gsap, ScrollTrigger, useGSAP, registerGsap } from "@/lib/motion";
-import { useMediaQuery, useReducedMotion } from "@/lib/device";
+import { portfolio, portfolioCategories, portfolioNote, type PortfolioCategory, type PortfolioProject } from "@/data/portfolio";
+import { mailto } from "@/lib/site";
+import { Flip, gsap, motion, useGSAP, registerGsap } from "@/lib/motion";
+import { useReducedMotion } from "@/lib/device";
 import { FilterChips, type FilterOption } from "@/components/ui/FilterChips";
+import { ActionLink } from "@/components/buttons/ActionLink";
+import { SelectionBox } from "@/components/ui/SelectionBox";
 import { ExhibitionPending } from "./ExhibitionPending";
 import { ProjectViewer } from "./ProjectViewer";
 
@@ -14,103 +17,111 @@ registerGsap();
 type Filter = PortfolioCategory | "all";
 
 /**
- * PORTFOLIO — a digital exhibition. On large screens the work hangs in one pinned horizontal
- * gallery that the vertical scroll walks through; on small screens it is a vertical sequence.
- * Every panel opens the full-screen viewer. With no data it renders the pending exhibition.
+ * PORTFOLIO — an exhibition wall. Pieces hang in a tight grid sized close to their native
+ * resolution (the current files are preview crops), re-flow with FLIP when filtered, and open
+ * in the full-screen viewer. With no data it renders the pending exhibition instead.
  */
 export function PortfolioExhibition({ projects = portfolio }: { projects?: PortfolioProject[] }) {
   const [filter, setFilter] = useState<Filter>("all");
   const [open, setOpen] = useState<number | null>(null);
-  const wide = useMediaQuery("(min-width: 1024px)");
   const reduced = useReducedMotion();
-  const horizontal = wide && !reduced;
-
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLOListElement>(null);
+  const gridRef = useRef<HTMLOListElement>(null);
+  const flipState = useRef<Flip.FlipState>(null);
 
   const visible = filter === "all" ? projects : projects.filter((p) => p.category === filter);
 
+  const choose = (next: Filter) => {
+    if (next === filter) return;
+    if (!reduced && gridRef.current) flipState.current = Flip.getState(gridRef.current.children);
+    setFilter(next);
+  };
+
   useGSAP(
     () => {
-      const track = trackRef.current;
-      if (!horizontal || !track || !sectionRef.current) return;
-      const distance = () => Math.max(0, track.scrollWidth - window.innerWidth);
-      gsap.to(track, {
-        x: () => -distance(),
-        ease: "none",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top top",
-          end: () => `+=${distance()}`,
-          pin: true,
-          scrub: 0.6,
-          invalidateOnRefresh: true,
-        },
+      const state = flipState.current;
+      if (!state || !gridRef.current) return;
+      flipState.current = null;
+      Flip.from(state, {
+        targets: gridRef.current.children,
+        duration: motion.duration.slow,
+        ease: motion.ease.inOut,
+        absolute: true,
+        stagger: 0.01,
+        onEnter: (els) => gsap.fromTo(els, { autoAlpha: 0, scale: 0.94 }, { autoAlpha: 1, scale: 1, duration: motion.duration.base, delay: 0.2 }),
+        onLeave: (els) => gsap.to(els, { autoAlpha: 0, scale: 0.94, duration: motion.duration.fast }),
       });
-      ScrollTrigger.refresh();
     },
-    { dependencies: [horizontal, filter], revertOnUpdate: true },
+    { dependencies: [filter] },
   );
 
   if (projects.length === 0) return <ExhibitionPending />;
 
+  // Only categories that actually hold work are offered as filters.
   const options: FilterOption<Filter>[] = [
     { id: "all", label: "All", count: projects.length },
-    ...portfolioCategories.map((c) => ({ id: c.id, label: c.label, count: projects.filter((p) => p.category === c.id).length })),
+    ...portfolioCategories
+      .map((c) => ({ id: c.id as Filter, label: c.label, count: projects.filter((p) => p.category === c.id).length }))
+      .filter((o) => o.count > 0),
   ];
 
   return (
-    <>
-      <div className="container-page">
-        <FilterChips label="Filter work by category" options={options} value={filter} onChange={setFilter} />
+    <div className="container-page">
+      <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        <FilterChips label="Filter work by category" options={options} value={filter} onChange={choose} />
+        <p className="label text-ink-400" aria-live="polite">
+          Showing <span className="text-paper">{String(visible.length).padStart(2, "0")}</span> pieces
+        </p>
       </div>
 
-      <div ref={sectionRef} className="lg:flex lg:h-svh lg:items-center lg:overflow-hidden">
-        <ol
-          ref={trackRef}
-          className="container-page mt-10 flex flex-col gap-14 lg:mt-0 lg:w-max lg:max-w-none lg:flex-row lg:items-end lg:gap-[6vw] lg:pr-[20vw]"
-        >
-          {visible.map((p) => (
-            <li key={p.slug}>
-              <ProjectPanel project={p} number={projects.indexOf(p) + 1} onOpen={() => setOpen(visible.indexOf(p))} />
+      <ol ref={gridRef} className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-4 xl:grid-cols-5">
+        {projects.map((p, i) => {
+          const shown = visible.includes(p);
+          return (
+            <li key={p.slug} data-flip-id={p.slug} hidden={!shown}>
+              <PieceTile project={p} number={i + 1} onOpen={() => setOpen(visible.indexOf(p))} />
             </li>
-          ))}
-        </ol>
+          );
+        })}
+      </ol>
+
+      <div className="mt-16 flex flex-col gap-6 border-t border-ink-800 pt-8 md:flex-row md:items-center md:justify-between">
+        <p className="max-w-md text-paper/80">{portfolioNote}</p>
+        <ActionLink href={mailto("Portfolio request")} variant="primary">
+          Request the complete portfolio
+        </ActionLink>
       </div>
 
       <ProjectViewer projects={visible} index={open} onChange={setOpen} />
-    </>
+    </div>
   );
 }
 
-function ProjectPanel({ project, number, onOpen }: { project: PortfolioProject; number: number; onOpen: () => void }) {
+function PieceTile({ project, number, onOpen }: { project: PortfolioProject; number: number; onOpen: () => void }) {
   const { cover } = project;
   const category = portfolioCategories.find((c) => c.id === project.category)?.label;
+  const identity = project.category === "branding";
   return (
-    <button type="button" onClick={onOpen} data-cursor="view" className="group block w-full text-left lg:w-auto">
-      {/* Height is fixed on large screens; width follows the piece's own aspect ratio. */}
-      <span
-        className="relative block w-full overflow-hidden bg-ink-850 lg:h-[min(62svh,44rem)] lg:w-auto"
-        style={{ aspectRatio: `${cover.width} / ${cover.height}` }}
-      >
+    <button type="button" onClick={onOpen} data-cursor="view" className="group relative block w-full text-left">
+      <span className={identity ? "relative block aspect-square overflow-hidden bg-white" : "relative block aspect-square overflow-hidden bg-ink-850"}>
         <Image
           src={cover.src}
           alt={cover.alt}
           fill
-          sizes="(max-width: 1024px) 100vw, 50vw"
-          className="object-cover transition-transform duration-[1200ms] ease-[var(--ease-out-expo)] group-hover:scale-[1.04]"
+          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+          className={
+            identity
+              ? "object-contain p-[8%] transition-transform duration-700 ease-[var(--ease-out-expo)] group-hover:scale-[1.04]"
+              : "object-cover transition-transform duration-700 ease-[var(--ease-out-expo)] group-hover:scale-[1.04]"
+          }
         />
       </span>
-      <span className="mt-4 flex items-baseline justify-between gap-6 border-t border-ink-800 pt-3">
+      <SelectionBox visible={false} className="inset-0 group-hover:opacity-100 group-focus-visible:opacity-100" />
+      <span className="mt-3 flex items-baseline justify-between gap-3">
         <span className="min-w-0">
-          <span className="block truncate font-display text-lead font-semibold uppercase transition-colors group-hover:text-signal">
-            {project.title}
-          </span>
-          <span className="label mt-1 block text-ink-400">
-            {project.clientName} — {category}
-          </span>
+          <span className="block truncate text-sm text-paper transition-colors group-hover:text-signal">{project.title}</span>
+          <span className="label mt-0.5 block text-ink-400">{category}</span>
         </span>
-        <span className="label text-ink-500">{String(number).padStart(2, "0")}</span>
+        <span className="label text-ink-400">{String(number).padStart(2, "0")}</span>
       </span>
     </button>
   );
