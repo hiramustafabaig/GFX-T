@@ -40,21 +40,15 @@ export function ServicesTeaser() {
         stagger: 0.15,
         scrollTrigger: { trigger: ref.current, start: "top 60%", once: true },
       });
-      // Rows slide in from the right, one after another.
-      gsap.from("[data-service-row]", {
-        xPercent: 8,
-        autoAlpha: 0,
-        duration: 0.9,
-        stagger: 0.08,
-        scrollTrigger: { trigger: "[data-service-list]", start: "top 80%", once: true },
-      });
-      // On large screens the active service follows the scroll position.
-      const mm = gsap.matchMedia();
-      mm.add("(min-width: 1024px)", () => {
-        gsap.utils.toArray<HTMLElement>("[data-service-row]").forEach((row, i) =>
-          ScrollTrigger.create({ trigger: row, start: "top 55%", end: "bottom 55%", onToggle: (st) => st.isActive && setActive(i) }),
-        );
-      });
+      // Each row slides in as it reaches the viewport (per row, so long mobile lists work too).
+      gsap.utils.toArray<HTMLElement>("[data-service-row]").forEach((row) =>
+        gsap.from(row, { xPercent: 6, autoAlpha: 0, duration: 0.8, scrollTrigger: { trigger: row, start: "top 92%", once: true } }),
+      );
+      // The active service follows the scroll position (on touch screens this is the only way
+      // rows light up, since there is no hover).
+      gsap.utils.toArray<HTMLElement>("[data-service-row]").forEach((row, i) =>
+        ScrollTrigger.create({ trigger: row, start: "top 60%", end: "bottom 60%", onToggle: (st) => st.isActive && setActive(i) }),
+      );
     },
     { scope: ref, dependencies: [reduced], revertOnUpdate: true },
   );
@@ -146,7 +140,7 @@ export function ServicesTeaser() {
                     <span className="mt-2 block max-w-lg text-sm leading-relaxed text-ink-800">{s.description}</span>
                   </span>
                   <span className="flex items-center gap-4">
-                    <ServiceGlyph glyph={s.glyph} tone="paper" play={on} className="hidden size-10 md:block" />
+                    <ServiceGlyph glyph={s.glyph} tone="paper" play={on} className="size-8 md:size-10" />
                     <span className={cn("grid size-10 place-items-center transition-colors duration-500", on ? "bg-ink-950 text-signal" : "border border-ink-950/25")}>
                       <svg viewBox="0 0 16 16" className={cn("size-3.5 transition-transform duration-500", on ? "rotate-0" : "-rotate-45")} fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
                         <path d="M2 8h11M9 4l4 4-4 4" />

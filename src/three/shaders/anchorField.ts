@@ -207,7 +207,7 @@ export const pathsVertex = /* glsl */ `
     float selected = mix(aSelB, aSelC, mBC);
     // Depth cue: contours fade toward the back of the stack.
     float structured = mix(0.16, mix(0.08, 0.9, aLayer * aLayer * aLayer), mBC);
-    vAlpha = mix(structured, 0.95, selected) * uIntro;
+    vAlpha = mix(structured, 1.0, selected) * uIntro;
     vColor = mix(uPaper, uSignal, selected);
   }
 `;

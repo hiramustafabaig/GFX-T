@@ -52,14 +52,14 @@ export function CategoryStats() {
             className="group relative overflow-hidden bg-ink-950 p-5 text-paper transition-transform duration-500 ease-[var(--ease-out-expo)] hover:-translate-y-1.5 md:p-6"
           >
             <span aria-hidden className="absolute inset-x-0 top-0 h-1 origin-left scale-x-0 bg-signal transition-transform duration-500 group-hover:scale-x-100" />
-            <p className="label flex items-center justify-between text-ink-400">
+            <p className="flex items-center justify-between font-display text-base font-bold uppercase tracking-[0.04em] text-paper md:text-lg">
               {c.label}
-              <span aria-hidden className="size-1.5 bg-signal transition-transform duration-500 group-hover:rotate-45" />
+              <span aria-hidden className="size-2 bg-signal transition-transform duration-500 group-hover:rotate-45" />
             </p>
             <p className="mt-6 font-display text-[clamp(3rem,2rem+3vw,5rem)] font-extrabold leading-none text-signal transition-[font-variation-settings] duration-500 [font-variation-settings:'wdth'_100] group-hover:[font-variation-settings:'wdth'_120]">
               <span data-count={list.length}>{String(list.length).padStart(2, "0")}</span>
             </p>
-            <p className="mt-1 text-sm text-paper/60">{list.length === 1 ? "brand" : "brands"}</p>
+            <p className="mt-1 text-sm text-paper/75">{list.length === 1 ? "brand" : "brands"}</p>
             <div aria-hidden className="mt-6 flex gap-1.5">
               {list.slice(0, 3).map((client) => (
                 <span key={client.slug} className="grid h-12 flex-1 place-items-center overflow-hidden bg-paper px-1.5">

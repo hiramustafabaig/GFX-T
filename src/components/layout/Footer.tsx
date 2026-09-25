@@ -37,7 +37,7 @@ export function Footer() {
             We create. We strategize. <span className="text-signal">We elevate.</span>
           </p>
           <p className="mt-4 max-w-sm text-sm text-paper/60">{site.tagline}</p>
-          <div className="mt-8">
+          <div className="mt-8 flex justify-center md:justify-start">
             <ActionLink href="/contact" variant="primary">
               Start a project
             </ActionLink>

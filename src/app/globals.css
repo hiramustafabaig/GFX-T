@@ -229,3 +229,19 @@ html.lenis body {
     transform: translateX(100%);
   }
 }
+
+/* Vision & Mission: a signal pulse travelling the mission path (x 40 → 360 in the diagram). */
+@keyframes path-pulse {
+  0% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+  10%,
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(320px);
+    opacity: 0;
+  }
+}

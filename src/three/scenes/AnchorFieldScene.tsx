@@ -8,6 +8,7 @@ import {
   Color,
   Euler,
   Group,
+  LinearSRGBColorSpace,
   Matrix3,
   Matrix4,
   MathUtils,
@@ -33,6 +34,11 @@ export type AnchorFieldState = {
   /** Pointer in normalised device coordinates. */
   pointer: { x: number; y: number };
   pointerActive: boolean;
+  /**
+   * Free vertical band for the form on portrait screens, as fractions of the stage height
+   * (measured from the DOM). The form is centred in it and scaled to fit.
+   */
+  formBand?: { top: number; bottom: number };
 };
 
 type Props = {
@@ -47,8 +53,10 @@ type Props = {
   placement?: "hero" | "stage";
 };
 
-const PAPER = new Color("#f3f0e8");
-const SIGNAL = new Color("#ffbf01");
+// The shaders write colours straight to the screen (no output colour-space conversion), so the
+// brand hexes are stored as-is rather than converted to linear — otherwise yellow renders orange.
+const PAPER = new Color().setHex(0xf3f0e8, LinearSRGBColorSpace);
+const SIGNAL = new Color().setHex(0xffbf01, LinearSRGBColorSpace);
 
 /** Map hero progress to the three beats. Kept here so DOM + GL share one choreography. */
 export const HERO_BEATS = {
@@ -153,14 +161,24 @@ export function AnchorFieldScene({ state, quality, still = false, placement = "h
     const halfW = 3.47 * aspect; // visible half-width at z=0 (camera z 11, fov 35)
     // Headline and copy sit top-left (landscape) / top (portrait), so the form lands low-right / low.
     const hero = placement === "hero";
-    u.uFormOffset.value.set(
-      portrait ? 0 : halfW * (hero ? 0.6 : 0.64),
-      portrait ? (hero ? -2.3 : 1.9) + m2 * 0.1 : (hero ? -0.2 : 1.05) + m2 * 0.1,
-      0,
-    );
-    u.uFormScale.value = hero
-      ? portrait ? Math.min(0.62, halfW * 0.28) : Math.min(1.2, halfW * 0.215)
-      : (portrait ? Math.min(0.8, halfW * 0.3) : Math.min(1.05, halfW * 0.2)) * 0.82;
+    const band = hero && portrait ? s.formBand : undefined;
+    if (band && band.bottom > band.top) {
+      // Visible half-height at z = 0 for this camera (z 11, fov 35).
+      const halfH = 3.468;
+      const bandH = (band.bottom - band.top) * 2 * halfH;
+      u.uFormOffset.value.set(0, (0.5 - (band.top + band.bottom) / 2) * 2 * halfH, 0);
+      // The nib is ~3.3 units tall and ~3 wide; fit it with a margin.
+      u.uFormScale.value = MathUtils.clamp(Math.min((bandH * 0.86) / 3.3, (halfW * 1.7) / 3), 0.34, 0.95);
+    } else {
+      u.uFormOffset.value.set(
+        portrait ? 0 : halfW * (hero ? 0.555 : 0.64),
+        portrait ? (hero ? -2.3 : 1.9) + m2 * 0.1 : (hero ? -0.2 : 1.05) + m2 * 0.1,
+        0,
+      );
+      u.uFormScale.value = hero
+        ? portrait ? Math.min(0.62, halfW * 0.28) : Math.min(1.5, halfW * 0.27)
+        : (portrait ? Math.min(0.8, halfW * 0.3) : Math.min(1.05, halfW * 0.2)) * 0.82;
+    }
     const px = s.pointerActive ? s.pointer.x : 0;
     const py = s.pointerActive ? s.pointer.y : 0;
     // Ends nearly face-on (the mark stays legible) with just enough yaw to reveal its depth layers.
