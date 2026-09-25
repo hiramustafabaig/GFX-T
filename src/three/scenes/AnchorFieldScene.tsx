@@ -155,10 +155,12 @@ export function AnchorFieldScene({ state, quality, still = false, placement = "h
     const hero = placement === "hero";
     u.uFormOffset.value.set(
       portrait ? 0 : halfW * (hero ? 0.6 : 0.64),
-      portrait ? (hero ? -1.75 : 1.9) + m2 * 0.12 : (hero ? -0.35 : 1.05) + m2 * 0.15,
+      portrait ? (hero ? -2.3 : 1.9) + m2 * 0.1 : (hero ? -0.2 : 1.05) + m2 * 0.1,
       0,
     );
-    u.uFormScale.value = (portrait ? Math.min(0.8, halfW * 0.3) : Math.min(1.05, halfW * 0.2)) * (hero ? 1 : 0.82);
+    u.uFormScale.value = hero
+      ? portrait ? Math.min(0.62, halfW * 0.28) : Math.min(1.2, halfW * 0.215)
+      : (portrait ? Math.min(0.8, halfW * 0.3) : Math.min(1.05, halfW * 0.2)) * 0.82;
     const px = s.pointerActive ? s.pointer.x : 0;
     const py = s.pointerActive ? s.pointer.y : 0;
     // Ends nearly face-on (the mark stays legible) with just enough yaw to reveal its depth layers.

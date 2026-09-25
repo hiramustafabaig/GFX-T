@@ -158,14 +158,14 @@ export function VisionMission({ detail = "summary", index }: Props) {
   ];
 
   return (
-    <section ref={ref} aria-label="Vision and Mission" className="relative bg-ink-900 py-[var(--spacing-section)]">
+    <section ref={ref} aria-label="Vision and Mission" className="relative bg-ink-900 pb-[var(--spacing-section)] pt-[calc(var(--spacing-section)*0.45)]">
       <div className="container-page">
         <SectionLabel index={index}>Vision &amp; Mission</SectionLabel>
 
-        <div className="mt-12 grid gap-x-16 lg:grid-cols-12">
+        <div className="mt-8 grid gap-x-16 lg:grid-cols-12">
           {/* Sticky diagram (large screens) */}
           <div className="hidden lg:col-span-5 lg:block">
-            <div className="sticky top-[calc(var(--header-h)+8vh)]">
+            <div className="sticky top-[calc(var(--header-h)+6vh)] pt-[6vh]">
               <Diagram mode={mode} className="max-w-[440px] 2xl:max-w-[560px]" />
               <p className="label mt-8 flex gap-6 text-ink-400" aria-hidden>
                 <span className={cn("transition-colors duration-500", mode === "vision" && "text-paper")}>
@@ -185,7 +185,7 @@ export function VisionMission({ detail = "summary", index }: Props) {
                 data-block={b.id}
                 aria-labelledby={`${b.id}-heading`}
                 className={cn(
-                  "flex flex-col justify-center py-12 lg:min-h-[85svh] lg:py-0",
+                  "flex flex-col py-12 lg:min-h-[70svh] lg:py-[6vh]",
                   b.id === "mission" && "border-t border-ink-800 lg:border-0",
                 )}
               >

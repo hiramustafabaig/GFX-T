@@ -24,7 +24,14 @@ export function Footer() {
     <footer className="relative isolate overflow-hidden border-t border-ink-800 bg-ink-950">
       <div aria-hidden className="absolute inset-0 -z-10 opacity-50 [background-image:radial-gradient(var(--color-ink-800)_1px,transparent_1.2px)] [background-size:28px_28px] [mask-image:linear-gradient(180deg,transparent,black_60%)]" />
 
-      <div className="container-page grid gap-12 pb-12 pt-16 md:grid-cols-2 md:pt-24 lg:grid-cols-12">
+      {/* Signature: the full wordmark as a faint layer behind the whole footer. */}
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-16 -z-10 md:bottom-20">
+        <div className="container-page">
+          <Image src="/brand/gfxt-wordmark-paper.png" alt="" width={1330} height={226} sizes="100vw" className="h-auto w-full select-none opacity-[0.06]" />
+        </div>
+      </div>
+
+      <div className="container-page grid gap-12 pb-16 pt-16 md:grid-cols-2 md:pb-28 md:pt-24 lg:grid-cols-12">
         <div className="lg:col-span-4">
           <p className="max-w-sm font-display text-2xl font-bold uppercase leading-tight">
             We create. We strategize. <span className="text-signal">We elevate.</span>
@@ -80,13 +87,6 @@ export function Footer() {
           <p className="label mt-6 text-ink-400">
             <StudioTime />
           </p>
-        </div>
-      </div>
-
-      {/* Signature: the wordmark at full width, bleeding off the bottom edge. */}
-      <div aria-hidden className="container-page">
-        <div className="group relative translate-y-[18%] select-none opacity-[0.14] transition-opacity duration-700 hover:opacity-30">
-          <Image src="/brand/gfxt-wordmark-paper.png" alt="" width={1330} height={226} sizes="100vw" className="h-auto w-full" />
         </div>
       </div>
 
