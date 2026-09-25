@@ -8,7 +8,6 @@ import { hasWebGL, useFinePointer, useIsMobile, useReducedMotion } from "@/lib/d
 import { ActionLink } from "@/components/buttons/ActionLink";
 import { HERO_BEATS, type AnchorFieldState } from "@/three/scenes/AnchorFieldScene";
 import { HeroFallback } from "./HeroFallback";
-import { SelectionBox } from "@/components/ui/SelectionBox";
 import { cn } from "@/lib/cn";
 
 registerGsap();
@@ -189,13 +188,12 @@ export function Hero() {
                       {line}
                     </span>
                   </span>
-                  <SelectionBox visible={active} />
                 </span>
               );
             })}
           </h1>
 
-          <div className="mt-7 flex flex-col gap-6 md:mt-9 lg:flex-row lg:items-end lg:gap-10">
+          <div className="mt-7 flex flex-col gap-6 md:mt-9 2xl:flex-row 2xl:items-end 2xl:gap-10">
             <p data-hero-fade className="max-w-md text-lead text-paper/85">
               {site.tagline}
             </p>
