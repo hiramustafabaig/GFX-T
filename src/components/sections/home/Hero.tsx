@@ -16,7 +16,6 @@ const AnchorFieldCanvas = dynamic(() => import("@/three/AnchorFieldCanvas"), { s
 
 /** Per-beat width axis: create = neutral, strategize = condensed (order), elevate = expanded. */
 const BEAT_WIDTH = [100, 86, 122] as const;
-const BEAT_LABELS = ["Create", "Strategize", "Elevate"] as const;
 
 /**
  * HERO — "Anchor → Path → Form".
@@ -26,7 +25,6 @@ const BEAT_LABELS = ["Create", "Strategize", "Elevate"] as const;
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const lineRefs = useRef<(HTMLSpanElement | null)[]>([]);
-  const coordsRef = useRef<HTMLSpanElement>(null);
   const fieldState = useRef<AnchorFieldState>({
     progress: 0,
     pointer: { x: 10, y: 10 },
@@ -103,7 +101,7 @@ export function Hero() {
     { dependencies: [selected, reduced] },
   );
 
-  // Pointer → NDC for the pen-tool interaction; coordinates readout like a design tool.
+  // Pointer → NDC for the pen-tool interaction.
   useEffect(() => {
     if (!finePointer || reduced) return;
     const onMove = (e: PointerEvent) => {
@@ -112,8 +110,6 @@ export function Hero() {
       const inHero = (sectionRef.current?.getBoundingClientRect().bottom ?? 0) > e.clientY;
       fieldState.current.pointer = { x, y };
       fieldState.current.pointerActive = inHero;
-      if (coordsRef.current)
-        coordsRef.current.textContent = `X ${String(Math.round(e.clientX)).padStart(4, "0")}  Y ${String(Math.round(e.clientY)).padStart(4, "0")}`;
     };
     const onLeave = () => (fieldState.current.pointerActive = false);
     window.addEventListener("pointermove", onMove, { passive: true });
@@ -168,7 +164,7 @@ export function Hero() {
           <h1
             id="hero-heading"
             // Sized by width AND height so all three lines always fit the stage.
-            className="mt-5 whitespace-nowrap font-display text-[min(10.4vw,7.4svh)] font-extrabold uppercase leading-[0.9] tracking-[-0.025em] md:mt-7 md:text-[min(6.6vw,11svh)]"
+            className="mt-5 whitespace-nowrap font-display text-[min(10.4vw,7.4svh)] font-extrabold uppercase leading-[0.9] tracking-[-0.025em] md:mt-7 md:text-[min(5.8vw,10svh)]"
             onPointerLeave={() => setHovered(null)}
           >
             {site.heroHeading.map((line, i) => {
@@ -218,25 +214,6 @@ export function Hero() {
           ) : (
             <div aria-hidden className="flex-1" />
           )}
-
-          <div
-            data-hero-fade
-            aria-hidden
-            // Decorative; hidden on phones so the form's box gets the space.
-            className="label hidden items-center justify-between border-t border-ink-800 pt-4 text-ink-400 sm:flex"
-          >
-            <span className="flex items-center gap-6">
-              {BEAT_LABELS.map((label, i) => (
-                <span key={label} className={cn("transition-colors duration-500", beat === i && "text-paper")}>
-                  <span className={cn("mr-2", beat === i ? "text-signal" : "text-ink-500")}>0{i + 1}</span>
-                  {label}
-                </span>
-              ))}
-            </span>
-            <span ref={coordsRef} className="hidden tabular-nums md:inline">
-              {reduced ? "" : "Scroll to begin"}
-            </span>
-          </div>
         </div>
       </div>
     </section>

@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { MobileShapes } from "@/components/ui/MobileShapes";
 import { RevealText } from "@/components/typography/RevealText";
 import { SectionLabel } from "@/components/typography/SectionLabel";
 import { cn } from "@/lib/cn";
@@ -20,11 +21,12 @@ type Props = {
  */
 export function PageIntro({ index, eyebrow, title, subtitle, lead, children, className }: Props) {
   return (
-    <section className={cn("relative isolate border-b border-ink-800 pb-12 md:pb-16", className)}>
+    <section className={cn("relative isolate border-b border-ink-800 pb-8 md:pb-16", className)}>
       <div
         aria-hidden
         className="absolute inset-0 -z-10 opacity-70 [background-image:radial-gradient(var(--color-ink-700)_1px,transparent_1.2px)] [background-size:32px_32px] [mask-image:radial-gradient(ellipse_70%_80%_at_80%_20%,black,transparent_75%)]"
       />
+      <MobileShapes variant={0} />
       <div className="container-page pt-[calc(var(--header-h)+clamp(2.5rem,6vw,5rem))]">
         <SectionLabel index={index}>{eyebrow}</SectionLabel>
         <RevealText

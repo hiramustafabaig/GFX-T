@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { MobileShapes } from "@/components/ui/MobileShapes";
 import { useRef } from "react";
 import { portfolio, portfolioIntro } from "@/data/portfolio";
 import { gsap, useGSAP, registerGsap } from "@/lib/motion";
@@ -47,7 +48,8 @@ export function WorkTeaser() {
   const columns = Array.from({ length: COLUMNS }, (_, c) => pieces.filter((_, i) => i % COLUMNS === c));
 
   return (
-    <section ref={ref} aria-labelledby="work-heading" className="overflow-hidden bg-ink-950 py-[var(--spacing-section)]">
+    <section ref={ref} aria-labelledby="work-heading" className="relative isolate overflow-hidden bg-ink-950 py-[var(--spacing-section)]">
+      <MobileShapes variant={0} />
       <div className="container-page grid gap-10 lg:grid-cols-12">
         <div className="lg:col-span-6">
           <SectionLabel index="05">Selected work</SectionLabel>

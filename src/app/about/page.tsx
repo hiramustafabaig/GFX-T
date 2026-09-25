@@ -49,7 +49,7 @@ export default function AboutPage() {
       <PageIntro index="02" eyebrow="Our story" title="About Us" subtitle="Welcome to GFX-T" />
 
       {/* Story: facts on the left, the two paragraphs on the right, one shared top edge. */}
-      <section aria-labelledby="story-heading" className="container-page grid gap-10 py-12 md:py-16 lg:grid-cols-12 lg:gap-12">
+      <section aria-labelledby="story-heading" className="container-page grid gap-8 pb-12 pt-8 md:py-16 lg:grid-cols-12 lg:gap-12">
         <aside data-reveal className="lg:col-span-4">
           <dl className="grid gap-px border border-ink-800 bg-ink-800">
             <div className="bg-ink-950 p-5">

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { MobileShapes } from "@/components/ui/MobileShapes";
 import { leaders } from "@/data/management";
 import { ActionLink } from "@/components/buttons/ActionLink";
 import { SectionHeading } from "@/components/typography/SectionHeading";
@@ -11,7 +12,8 @@ import { cn } from "@/lib/cn";
  */
 export function Leadership({ index, compact, className }: { index: string; compact?: boolean; className?: string }) {
   return (
-    <section aria-labelledby="leadership-heading" className={cn("bg-ink-900", compact ? "py-12 md:py-16" : "py-16 md:py-24", className)}>
+    <section aria-labelledby="leadership-heading" className={cn("relative isolate bg-ink-900", compact ? "py-10 md:py-14" : "pb-10 pt-16 md:pb-14 md:pt-24", className)}>
+      <MobileShapes variant={2} />
       <div className="container-page">
         <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <div>
@@ -27,7 +29,7 @@ export function Leadership({ index, compact, className }: { index: string; compa
           </div>
         </div>
 
-        <ul className="mt-10 grid max-w-4xl gap-4 sm:grid-cols-2 md:mt-12 md:gap-6">
+        <ul className="mx-auto mt-10 grid max-w-4xl gap-4 sm:grid-cols-2 md:mt-12 md:gap-6">
           {leaders.map((l) => (
             <li key={l.slug}>
               <div data-reveal className="relative overflow-hidden border border-ink-800 bg-ink-900">

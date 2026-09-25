@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { MobileShapes } from "@/components/ui/MobileShapes";
 import { services } from "@/data/services";
 import { servicesTeaser } from "@/data/company";
 import { gsap, ScrollTrigger, useGSAP, registerGsap } from "@/lib/motion";
@@ -80,6 +81,7 @@ export function ServicesTeaser() {
         )}
       </svg>
 
+      <MobileShapes variant={1} tone="paper" />
       <div className="container-page grid gap-12 lg:grid-cols-12 lg:gap-16">
         {/* Sticky intro + live preview */}
         <div className="lg:col-span-5">

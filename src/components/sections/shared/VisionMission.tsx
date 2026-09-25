@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { MobileShapes } from "@/components/ui/MobileShapes";
 import { mission, missionSummary, vision, visionSummary, type Principle } from "@/data/company";
 import { gsap, motion, ScrollTrigger, useGSAP, registerGsap } from "@/lib/motion";
 import { useReducedMotion } from "@/lib/device";
@@ -191,7 +192,8 @@ export function VisionMission({ index }: Props) {
   ];
 
   return (
-    <section ref={ref} aria-label="Vision and Mission" className="relative bg-ink-900 pb-[var(--spacing-section)] pt-[calc(var(--spacing-section)*0.45)]">
+    <section ref={ref} aria-label="Vision and Mission" className="relative isolate bg-ink-900 pb-[var(--spacing-section)] pt-[calc(var(--spacing-section)*0.45)]">
+      <MobileShapes variant={2} />
       <div className="container-page">
         <SectionLabel index={index}>Vision &amp; Mission</SectionLabel>
 
@@ -222,7 +224,6 @@ export function VisionMission({ index }: Props) {
                   b.id === "mission" && "border-t border-ink-800 lg:border-0",
                 )}
               >
-                <InViewDiagram mode={b.id} className={cn("mb-5 lg:hidden", b.id === "mission" ? "max-w-[320px]" : "max-w-[210px]")} />
                 <RevealText
                   as="h2"
                   id={`${b.id}-heading`}
@@ -235,6 +236,8 @@ export function VisionMission({ index }: Props) {
                 >
                   {b.title}
                 </RevealText>
+                {/* Phones: the diagram sits centred under its heading. */}
+                <InViewDiagram mode={b.id} className={cn("mx-auto mt-5 w-full lg:hidden", b.id === "mission" ? "max-w-[320px]" : "max-w-[210px]")} />
 
                 <p className="mt-5 max-w-2xl text-lead text-paper/85 lg:mt-8">{b.summary}</p>
                 <ol className="mt-6 flex flex-wrap gap-x-8 gap-y-3 lg:mt-10">
