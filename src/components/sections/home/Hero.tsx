@@ -124,7 +124,7 @@ export function Hero() {
     <section
       ref={sectionRef}
       aria-labelledby="hero-heading"
-      className={cn("relative", reduced ? "h-svh" : "h-[240svh] md:h-[320svh]")}
+      className={cn("relative", reduced ? "h-svh" : "h-[170svh] md:h-[320svh]")}
     >
       <div className="sticky top-0 h-svh overflow-hidden">
         {/* Artboard dot grid (echoes the dotted patches in the company deck). */}
@@ -149,7 +149,7 @@ export function Hero() {
         />
 
         {/* Order: meta → headline → tagline + actions → beat bar. The form fills the space low-right. */}
-        <div className="container-page relative flex h-full flex-col pb-6 pt-[calc(var(--header-h)+clamp(1rem,4svh,3rem))] md:pb-8">
+        <div className="container-page relative flex h-full flex-col justify-center pb-10 pt-[var(--header-h)] md:justify-start md:pb-8 md:pt-[calc(var(--header-h)+clamp(1rem,4svh,3rem))]">
           <ul data-hero-fade aria-label="About GFX-T" className="label flex flex-wrap items-center gap-2">
             <li className="flex items-center gap-2 bg-signal px-3 py-1.5 font-medium text-ink-950">
               <span aria-hidden className="size-1.5 bg-ink-950" />
@@ -205,15 +205,8 @@ export function Hero() {
             </div>
           </div>
 
-          {/* Phones: the field lives in its own box in the remaining space. */}
-          {mobile ? (
-            <div aria-hidden className="relative -mx-[var(--spacing-gutter)] mt-4 min-h-0 flex-1">
-              {webgl === true && <AnchorFieldCanvas state={fieldState} quality="mobile" still={reduced} placement="box" />}
-              {webgl === false && <HeroFallback />}
-            </div>
-          ) : (
-            <div aria-hidden className="flex-1" />
-          )}
+          {/* Desktop: the form fills the free space. Phones: no canvas — the copy sits centred. */}
+          {!mobile && <div aria-hidden className="flex-1" />}
         </div>
       </div>
     </section>

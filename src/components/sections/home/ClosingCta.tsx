@@ -3,19 +3,19 @@ import { contact, mailto } from "@/lib/site";
 import { ActionLink } from "@/components/buttons/ActionLink";
 import { RevealText } from "@/components/typography/RevealText";
 import { SectionLabel } from "@/components/typography/SectionLabel";
-import { RidgeStage } from "@/three/RidgeStage";
+import { RibbonStage } from "@/three/RibbonStage";
 
 /**
- * STILL THINKING? — the closing frame. Above the copy runs the Signal Ridge: a living terrain
- * of ridgelines that rises as the section arrives and swells into a signal-yellow peak under
- * the visitor's pointer. The site opens with anchors and closes with a landscape of paths.
+ * STILL THINKING? — the closing frame. Above the copy flows the Signal Ribbon: a band of fine
+ * lines twisting through space in the brand's yellows, rising as the section arrives and leaning
+ * toward the pointer. The site opens with anchors and closes with a ribbon of paths.
  */
 export function ClosingCta() {
   return (
     <section aria-labelledby="closing-heading" className="relative isolate min-h-svh overflow-hidden bg-ink-950">
-      {/* Signal Ridge: a living terrain of ridgelines across the upper part of the frame. */}
-      <div className="absolute inset-x-0 top-0 -z-10 h-[50%] [mask-image:linear-gradient(180deg,transparent_0%,black_6%,black_55%,transparent_96%)] md:h-[56%]">
-        <RidgeStage />
+      {/* Signal Ribbon across the upper part of the frame. */}
+      <div className="absolute inset-x-0 top-0 -z-10 h-[48%] [mask-image:linear-gradient(180deg,transparent_0%,black_10%,black_70%,transparent_100%)] md:h-[58%]">
+        <RibbonStage />
       </div>
 
       <div className="container-page flex min-h-svh flex-col justify-end pb-12 pt-[36svh] md:pb-16 lg:pt-[42svh]">

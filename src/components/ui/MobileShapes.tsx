@@ -1,27 +1,33 @@
 import { cn } from "@/lib/cn";
 
 type Kind = "cube" | "ring" | "anchor" | "plus";
-type Shape = { kind: Kind; top: string; left: string; size: number; dur: number; delay: number };
+/** Position is in px from a corner, so shapes stay inside a section's padding bands. */
+type Shape = { kind: Kind; size: number; dur: number; delay: number; top?: number; bottom?: number; left?: number; right?: number };
 
-/** Deterministic layouts so server and client render identically. */
+/**
+ * Deterministic layouts. Every shape sits in a corner of the section's top or bottom padding
+ * (never over copy): sections have at least ~40px of padding there on phones, shapes are ≤ 28px.
+ */
 const LAYOUTS: Shape[][] = [
   [
-    { kind: "cube", top: "8%", left: "78%", size: 34, dur: 14, delay: 0 },
-    { kind: "ring", top: "46%", left: "6%", size: 40, dur: 18, delay: -4 },
-    { kind: "anchor", top: "80%", left: "84%", size: 16, dur: 11, delay: -2 },
-    { kind: "plus", top: "30%", left: "90%", size: 14, dur: 16, delay: -6 },
+    { kind: "cube", top: 10, right: 18, size: 24, dur: 14, delay: 0 },
+    { kind: "ring", bottom: 8, left: 16, size: 26, dur: 18, delay: -4 },
+    { kind: "plus", bottom: 14, right: 22, size: 12, dur: 16, delay: -6 },
   ],
   [
-    { kind: "ring", top: "12%", left: "82%", size: 36, dur: 16, delay: -3 },
-    { kind: "cube", top: "62%", left: "86%", size: 28, dur: 13, delay: -5 },
-    { kind: "plus", top: "88%", left: "8%", size: 14, dur: 15, delay: 0 },
-    { kind: "anchor", top: "22%", left: "5%", size: 14, dur: 12, delay: -7 },
+    { kind: "ring", top: 8, right: 18, size: 26, dur: 16, delay: -3 },
+    { kind: "anchor", top: 16, right: 60, size: 12, dur: 11, delay: -2 },
+    { kind: "cube", bottom: 10, left: 18, size: 22, dur: 13, delay: -5 },
   ],
   [
-    { kind: "anchor", top: "10%", left: "88%", size: 16, dur: 10, delay: -1 },
-    { kind: "cube", top: "40%", left: "4%", size: 30, dur: 15, delay: -6 },
-    { kind: "ring", top: "74%", left: "80%", size: 44, dur: 19, delay: -2 },
-    { kind: "plus", top: "92%", left: "46%", size: 12, dur: 14, delay: -4 },
+    { kind: "plus", top: 12, right: 20, size: 14, dur: 15, delay: 0 },
+    { kind: "cube", bottom: 8, right: 20, size: 24, dur: 15, delay: -6 },
+    { kind: "anchor", bottom: 16, left: 18, size: 12, dur: 10, delay: -1 },
+  ],
+  // Page intros: top corner only (their bottom padding is too shallow for a shape).
+  [
+    { kind: "cube", top: 10, right: 18, size: 22, dur: 14, delay: 0 },
+    { kind: "anchor", top: 17, right: 58, size: 10, dur: 11, delay: -3 },
   ],
 ];
 
@@ -70,11 +76,22 @@ function ShapeView({ s, tone }: { s: Shape; tone: "ink" | "paper" }) {
 
 /**
  * Phones only: a few slowly rotating objects (wireframe cube, ring, anchor square, plus) drifting
- * behind a section — the mobile counterpart of the desktop interactions. Pure CSS 3D, low
+ * in the corners of a section's padding, clear of the copy — the mobile counterpart of the desktop interactions. Pure CSS 3D, low
  * opacity, no pointer events; hidden from md up and under reduced motion. The parent section
  * needs `relative isolate` so the layer sits above its background and below its content.
  */
-export function MobileShapes({ variant = 0, tone = "ink", className }: { variant?: number; tone?: "ink" | "paper"; className?: string }) {
+export function MobileShapes({
+  variant = 0,
+  tone = "ink",
+  topOffset = 0,
+  className,
+}: {
+  variant?: number;
+  tone?: "ink" | "paper";
+  /** Extra px added to top-anchored shapes (e.g. to clear the fixed header on page intros). */
+  topOffset?: number;
+  className?: string;
+}) {
   const layout = LAYOUTS[variant % LAYOUTS.length];
   return (
     <div aria-hidden className={cn("pointer-events-none absolute inset-0 -z-10 overflow-hidden motion-reduce:hidden md:hidden", className)}>
@@ -82,7 +99,7 @@ export function MobileShapes({ variant = 0, tone = "ink", className }: { variant
         <span
           key={i}
           className="absolute animate-[shape-drift_ease-in-out_infinite] opacity-45"
-          style={{ top: s.top, left: s.left, animationDuration: `${s.dur * 0.6}s`, animationDelay: `${s.delay}s` }}
+          style={{ top: s.top !== undefined ? s.top + topOffset : undefined, bottom: s.bottom, left: s.left, right: s.right, animationDuration: `${s.dur * 0.6}s`, animationDelay: `${s.delay}s` }}
         >
           <ShapeView s={s} tone={tone} />
         </span>

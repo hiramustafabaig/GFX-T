@@ -26,7 +26,8 @@ export function PageIntro({ index, eyebrow, title, subtitle, lead, children, cla
         aria-hidden
         className="absolute inset-0 -z-10 opacity-70 [background-image:radial-gradient(var(--color-ink-700)_1px,transparent_1.2px)] [background-size:32px_32px] [mask-image:radial-gradient(ellipse_70%_80%_at_80%_20%,black,transparent_75%)]"
       />
-      <MobileShapes variant={0} />
+      {/* Header is 72px tall; shapes sit just below it, beside the label row. */}
+      <MobileShapes variant={3} topOffset={76} />
       <div className="container-page pt-[calc(var(--header-h)+clamp(2.5rem,6vw,5rem))]">
         <SectionLabel index={index}>{eyebrow}</SectionLabel>
         <RevealText

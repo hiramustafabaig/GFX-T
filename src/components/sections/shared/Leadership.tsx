@@ -5,6 +5,7 @@ import { ActionLink } from "@/components/buttons/ActionLink";
 import { SectionHeading } from "@/components/typography/SectionHeading";
 import { SectionLabel } from "@/components/typography/SectionLabel";
 import { cn } from "@/lib/cn";
+import { SlideInPair } from "./SlideInPair";
 
 /**
  * LEADERSHIP — the CEO and COO as two portrait cards (photos shown as supplied: no filters).
@@ -29,10 +30,10 @@ export function Leadership({ index, compact, className }: { index: string; compa
           </div>
         </div>
 
-        <ul className="mx-auto mt-10 grid max-w-4xl gap-4 sm:grid-cols-2 md:mt-12 md:gap-6">
+        <SlideInPair className="mx-auto mt-10 grid max-w-4xl gap-4 sm:grid-cols-2 md:mt-12 md:gap-6">
           {leaders.map((l) => (
             <li key={l.slug}>
-              <div data-reveal className="relative overflow-hidden border border-ink-800 bg-ink-900">
+              <div className="relative overflow-hidden border border-ink-800 bg-ink-900">
                 <span className="relative block aspect-[4/5] overflow-hidden">
                   <Image src={l.portrait.src} alt={l.portrait.alt} fill sizes="(max-width: 640px) 100vw, 440px" className="object-cover object-top" />
                   <span aria-hidden className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-ink-950/90 to-transparent" />
@@ -52,7 +53,7 @@ export function Leadership({ index, compact, className }: { index: string; compa
               </div>
             </li>
           ))}
-        </ul>
+        </SlideInPair>
       </div>
     </section>
   );
