@@ -115,20 +115,27 @@ export function Header() {
             onClick={() => setMenuOpen(!menuOpen)}
             aria-expanded={menuOpen}
             aria-controls="site-menu"
-            className="label relative z-10 flex h-11 items-center gap-3 border border-paper/20 px-4 text-paper transition-colors hover:border-signal lg:hidden"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            className="relative z-10 grid size-11 place-items-center border border-paper/20 text-paper transition-colors hover:border-signal lg:hidden"
           >
-            {menuOpen ? "Close" : "Menu"}
-            <span aria-hidden className="relative block h-2.5 w-6">
+            {/* Hamburger: three lines that fold into an X. */}
+            <span aria-hidden className="relative block h-3.5 w-5">
               <span
                 className={cn(
-                  "absolute left-0 top-0 h-px w-full bg-current transition-transform duration-500",
-                  menuOpen && "translate-y-[5px] rotate-[34deg]",
+                  "absolute left-0 top-0 h-0.5 w-full bg-current transition-transform duration-500",
+                  menuOpen && "translate-y-[6px] rotate-45",
                 )}
               />
               <span
                 className={cn(
-                  "absolute bottom-0 left-0 h-px w-full bg-current transition-transform duration-500",
-                  menuOpen && "-translate-y-[4px] -rotate-[34deg]",
+                  "absolute left-0 top-1/2 h-0.5 w-full -translate-y-1/2 bg-current transition-opacity duration-300",
+                  menuOpen && "opacity-0",
+                )}
+              />
+              <span
+                className={cn(
+                  "absolute bottom-0 left-0 h-0.5 w-full bg-current transition-transform duration-500",
+                  menuOpen && "-translate-y-[6px] -rotate-45",
                 )}
               />
             </span>

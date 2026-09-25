@@ -42,8 +42,9 @@ export const portfolioCategories: { id: PortfolioCategory; label: string }[] = [
 
 export const portfolioNote = "Complete portfolio will be provided on client's request.";
 
+/** Page lead — the content document's portfolio description, phrased for visitors. */
 export const portfolioIntro =
-  "Showcase of past creative work - social media posts, campaign ads, and branding visuals - along with client brand/project logos.";
+  "A selection of our past creative work: social media posts, campaign ads and branding visuals, along with the brand and project logos we have designed.";
 
 type Piece = [slug: string, file: string, width: number, height: number, client?: [slug: string, name: string]];
 

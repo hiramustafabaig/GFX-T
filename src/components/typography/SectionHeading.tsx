@@ -8,6 +8,8 @@ type Props = {
   /** Surface: yellow text on ink; on paper and signal surfaces the accent is ink on a highlight. */
   tone?: "ink" | "paper" | "signal";
   as?: "h1" | "h2";
+  /** "lg": home chapters. "md": sections inside inner pages. */
+  size?: "lg" | "md";
   id?: string;
   className?: string;
 };
@@ -16,7 +18,7 @@ type Props = {
  * Section title. Large display type with one accent word; on hover the heading widens along
  * Archivo's width axis and a signal underline sweeps under the accent.
  */
-export function SectionHeading({ children, accent, tone = "ink", as = "h2", id, className }: Props) {
+export function SectionHeading({ children, accent, tone = "ink", as = "h2", size = "lg", id, className }: Props) {
   const i = accent ? children.toLowerCase().indexOf(accent.toLowerCase()) : -1;
   const parts = i >= 0 && accent ? [children.slice(0, i), children.slice(i, i + accent.length), children.slice(i + accent.length)] : [children, "", ""];
 
@@ -25,7 +27,8 @@ export function SectionHeading({ children, accent, tone = "ink", as = "h2", id, 
       as={as}
       id={id}
       className={cn(
-        "group/heading font-display text-h2 font-extrabold uppercase tracking-[-0.025em] transition-[font-variation-settings] duration-700 ease-[var(--ease-out-expo)] [font-variation-settings:'wdth'_100] hover:[font-variation-settings:'wdth'_114]",
+        size === "lg" ? "text-h2" : "text-[clamp(2rem,1.2rem+3vw,4rem)]",
+        "group/heading font-display font-extrabold uppercase tracking-[-0.025em] transition-[font-variation-settings] duration-700 ease-[var(--ease-out-expo)] [font-variation-settings:'wdth'_100] hover:[font-variation-settings:'wdth'_114]",
         className,
       )}
     >

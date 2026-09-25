@@ -65,7 +65,7 @@ export function WhyChooseUs() {
 
       <div className="container-page grid items-center gap-14 lg:grid-cols-12 lg:gap-12">
         <div className="lg:col-span-7">
-          <SectionLabel index="07">Our promise</SectionLabel>
+          <SectionLabel index="08">Our promise</SectionLabel>
           <h2
             id="why-heading"
             className="group/why mt-8 font-logo text-[clamp(2.6rem,1rem+6vw,7.5rem)] leading-[0.9] text-paper"

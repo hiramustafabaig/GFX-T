@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default function ClientsPage() {
   return (
     <>
-      <PageIntro index="05" eyebrow="Clients" title={clientsTeaser.heading} lead={clientsTeaser.body} className="pb-16 md:pb-24" />
+      <PageIntro index="05" eyebrow="Clients" title={clientsTeaser.heading} lead={clientsTeaser.body} />
       <section aria-label="Client list" className="bg-paper py-16 text-ink-950 md:py-24">
         <div className="container-page">
           <ClientsUniverse />

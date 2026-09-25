@@ -161,18 +161,14 @@ function InViewDiagram({ mode, className }: { mode: Mode; className?: string }) 
   );
 }
 
-type Props = {
-  /** "summary" for the Home teaser; "full" lists every principle with its body (About page). */
-  detail?: "summary" | "full";
-  index?: string;
-};
+type Props = { index?: string };
 
 /**
  * VISION / MISSION — a conceptual interactive system rather than two cards. The diagram is
  * sticky on large screens and re-arranges as each statement scrolls into focus; on small
  * screens each statement carries its own static diagram.
  */
-export function VisionMission({ detail = "summary", index }: Props) {
+export function VisionMission({ index }: Props) {
   const ref = useRef<HTMLElement>(null);
   const [mode, setMode] = useState<Mode>("vision");
 
@@ -221,7 +217,7 @@ export function VisionMission({ detail = "summary", index }: Props) {
                 data-block={b.id}
                 aria-labelledby={`${b.id}-heading`}
                 className={cn(
-                  "flex flex-col py-12 lg:min-h-[70svh] lg:py-[6vh]",
+                  "flex flex-col py-12 lg:py-14",
                   b.id === "mission" && "border-t border-ink-800 lg:border-0",
                 )}
               >
@@ -239,30 +235,14 @@ export function VisionMission({ detail = "summary", index }: Props) {
                   {b.title}
                 </RevealText>
 
-                {detail === "summary" ? (
-                  <>
-                    <p className="mt-8 max-w-2xl text-lead text-paper/85">{b.summary}</p>
-                    <ol className="mt-10 flex flex-wrap gap-x-8 gap-y-3">
-                      {b.principles.map((p) => (
-                        <li key={p.index} className="label flex items-center gap-2 text-ink-300">
-                          <span className="text-signal">{p.index}</span> {p.title}
-                        </li>
-                      ))}
-                    </ol>
-                  </>
-                ) : (
-                  <ol className="mt-10 border-t border-ink-700">
-                    {b.principles.map((p) => (
-                      <li key={p.index} className="grid gap-3 border-b border-ink-700 py-7 md:grid-cols-[4rem_1fr]">
-                        <span className="label pt-1 text-signal">{p.index}</span>
-                        <div>
-                          <h3 className="text-lead font-medium text-paper">{p.title}</h3>
-                          <p className="mt-2 text-paper/75">{p.body}</p>
-                        </div>
-                      </li>
-                    ))}
-                  </ol>
-                )}
+                <p className="mt-8 max-w-2xl text-lead text-paper/85">{b.summary}</p>
+                <ol className="mt-10 flex flex-wrap gap-x-8 gap-y-3">
+                  {b.principles.map((p) => (
+                    <li key={p.index} className="label flex items-center gap-2 text-ink-300">
+                      <span className="text-signal">{p.index}</span> {p.title}
+                    </li>
+                  ))}
+                </ol>
               </article>
             ))}
           </div>
