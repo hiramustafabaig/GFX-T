@@ -14,11 +14,11 @@ export function ClosingCta() {
   return (
     <section aria-labelledby="closing-heading" className="relative isolate min-h-svh overflow-hidden bg-ink-950">
       {/* Signal Ridge: a living terrain of ridgelines across the upper part of the frame. */}
-      <div className="absolute inset-x-0 top-0 -z-10 h-[50%] [mask-image:linear-gradient(180deg,transparent_0%,black_15%,black_55%,transparent_96%)] md:h-[56%]">
+      <div className="absolute inset-x-0 top-0 -z-10 h-[50%] [mask-image:linear-gradient(180deg,transparent_0%,black_6%,black_55%,transparent_96%)] md:h-[56%]">
         <RidgeStage />
       </div>
 
-      <div className="container-page flex min-h-svh flex-col justify-end pb-12 pt-[48svh] md:pb-16 lg:pt-[52svh]">
+      <div className="container-page flex min-h-svh flex-col justify-end pb-12 pt-[36svh] md:pb-16 lg:pt-[42svh]">
         <SectionLabel index="08" className="self-start">
           Your move
         </SectionLabel>
@@ -38,7 +38,7 @@ export function ClosingCta() {
             <RevealText split="words" className="text-lead text-paper/85">
               {closingCta.body}
             </RevealText>
-            <div className="mt-8">
+            <div className="mt-8 flex justify-center md:justify-start">
               <ActionLink href="/contact" variant="primary" size="lg">
                 Contact us
               </ActionLink>

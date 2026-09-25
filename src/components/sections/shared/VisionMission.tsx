@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { mission, missionSummary, vision, visionSummary, type Principle } from "@/data/company";
 import { gsap, motion, ScrollTrigger, useGSAP, registerGsap } from "@/lib/motion";
 import { useReducedMotion } from "@/lib/device";
@@ -11,6 +11,8 @@ import { cn } from "@/lib/cn";
 registerGsap();
 
 type Mode = "vision" | "mission";
+/** "seed": every anchor collapsed onto the origin — the state a diagram assembles from. */
+type Layout = Mode | "seed";
 
 /* --------------------------------------------------------------------------
    Diagram geometry. One set of nine anchors, two arrangements:
@@ -21,7 +23,8 @@ const N = 9;
 const C = 200;
 const RADII = [0, 150, 104, 172, 128, 160, 116, 178, 138];
 
-const LAYOUT: Record<Mode, { x: number; y: number }[]> = {
+const LAYOUT: Record<Layout, { x: number; y: number }[]> = {
+  seed: Array.from({ length: N }, () => ({ x: C, y: C })),
   vision: Array.from({ length: N }, (_, i) => {
     if (i === 0) return { x: C, y: C };
     const a = -Math.PI / 2 + ((i - 1) / (N - 1)) * Math.PI * 2 + 0.2;
@@ -32,12 +35,12 @@ const LAYOUT: Record<Mode, { x: number; y: number }[]> = {
 };
 
 /** Which anchors carry a principle number in each mode. */
-const MARKED: Record<Mode, number[]> = { vision: [3, 7], mission: [2, 5, 8] };
+const MARKED: Record<Layout, number[]> = { seed: [], vision: [3, 7], mission: [2, 5, 8] };
 
 /** Line i runs from its source to anchor i: rays from the origin, or segments along the path. */
-const source = (mode: Mode, i: number) => (mode === "vision" ? LAYOUT.vision[0] : LAYOUT.mission[Math.max(0, i - 1)]);
+const source = (mode: Layout, i: number) => (mode === "mission" ? LAYOUT.mission[Math.max(0, i - 1)] : LAYOUT[mode][0]);
 
-function Diagram({ mode, className }: { mode: Mode; className?: string }) {
+function Diagram({ mode, className }: { mode: Layout; className?: string }) {
   const ref = useRef<SVGSVGElement>(null);
   const reduced = useReducedMotion();
   const first = useRef(true);
@@ -121,7 +124,40 @@ function Diagram({ mode, className }: { mode: Mode; className?: string }) {
           </text>
         );
       })}
+      {/* Living motion once settled: a scan line for Vision, a pulse along the path for Mission. */}
+      {mode === "vision" && (
+        <line
+          x1={C}
+          y1={C}
+          x2={C}
+          y2={C - 185}
+          strokeWidth={1}
+          vectorEffect="non-scaling-stroke"
+          className="stroke-signal/50 [transform-box:view-box] [transform-origin:200px_200px] motion-safe:animate-[spin_7s_linear_infinite]"
+        />
+      )}
+      {mode === "mission" && (
+        <rect x={36} y={C - 4} width={8} height={8} className="fill-signal motion-safe:animate-[path-pulse_3.2s_var(--ease-in-out-quart)_infinite]" />
+      )}
     </svg>
+  );
+}
+
+/** Small-screen diagram: collapsed until it scrolls into view, then assembles (every time). */
+function InViewDiagram({ mode, className }: { mode: Mode; className?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { threshold: 0.45 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <div ref={ref} className={className}>
+      <Diagram mode={inView ? mode : "seed"} />
+    </div>
   );
 }
 
@@ -189,7 +225,7 @@ export function VisionMission({ detail = "summary", index }: Props) {
                   b.id === "mission" && "border-t border-ink-800 lg:border-0",
                 )}
               >
-                <Diagram mode={b.id} className="mb-10 max-w-[280px] lg:hidden" />
+                <InViewDiagram mode={b.id} className="mb-10 max-w-[300px] lg:hidden" />
                 <RevealText
                   as="h2"
                   id={`${b.id}-heading`}

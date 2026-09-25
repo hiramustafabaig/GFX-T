@@ -103,6 +103,27 @@ export function Hero() {
     { dependencies: [selected, reduced] },
   );
 
+  // Measure the free band between the copy and the beat bar; the form lands there on portrait.
+  useEffect(() => {
+    const stage = sectionRef.current?.querySelector<HTMLElement>(".sticky");
+    const copy = sectionRef.current?.querySelector<HTMLElement>("[data-hero-copy]");
+    const bar = sectionRef.current?.querySelector<HTMLElement>("[data-hero-bar]");
+    if (!stage || !copy || !bar) return;
+    const measure = () => {
+      const s = stage.getBoundingClientRect();
+      const top = (copy.getBoundingClientRect().bottom - s.top) / s.height;
+      // The bar is hidden on phones: then the band runs to the bottom of the stage.
+      const bottom = bar.offsetParent ? (bar.getBoundingClientRect().top - s.top) / s.height : 0.99;
+      fieldState.current.formBand = { top: top + 0.02, bottom: bottom - 0.02 };
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(stage);
+    ro.observe(copy);
+    document.fonts?.ready.then(measure);
+    return () => ro.disconnect();
+  }, []);
+
   // Pointer → NDC for the pen-tool interaction; coordinates readout like a design tool.
   useEffect(() => {
     if (!finePointer || reduced) return;
@@ -193,7 +214,7 @@ export function Hero() {
             })}
           </h1>
 
-          <div className="mt-7 flex flex-col gap-6 md:mt-9 2xl:flex-row 2xl:items-end 2xl:gap-10">
+          <div data-hero-copy className="mt-7 flex flex-col gap-6 md:mt-9 2xl:flex-row 2xl:items-end 2xl:gap-10">
             <p data-hero-fade className="max-w-md text-lead text-paper/85">
               {site.tagline}
             </p>
@@ -209,8 +230,10 @@ export function Hero() {
 
           <div
             data-hero-fade
+            data-hero-bar
             aria-hidden
-            className="label flex items-center justify-between border-t border-ink-800 pt-4 text-ink-400"
+            // Decorative; hidden on phones so the form gets the free space below the copy.
+            className="label hidden items-center justify-between border-t border-ink-800 pt-4 text-ink-400 sm:flex"
           >
             <span className="flex items-center gap-6">
               {BEAT_LABELS.map((label, i) => (

@@ -3,7 +3,7 @@
 
 import { useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useMemo } from "react";
-import { BufferAttribute, BufferGeometry, Color, MathUtils, Plane, Raycaster, ShaderMaterial, Vector2, Vector3 } from "three";
+import { BufferAttribute, BufferGeometry, Color, LinearSRGBColorSpace, MathUtils, Plane, Raycaster, ShaderMaterial, Vector2, Vector3 } from "three";
 import { curtainFragment, curtainVertex, lineFragment, lineVertex } from "../shaders/ridge";
 
 export type RidgeState = {
@@ -87,9 +87,10 @@ export function RidgeScene({ state, quality, still = false }: Props) {
       uAmp: { value: still ? 1 : 0.25 },
       uPointer: { value: new Vector2(0, -2) },
       uPointerAmp: { value: 0 },
-      uPaper: { value: new Color("#f3f0e8") },
-      uSignal: { value: new Color("#ffbf01") },
-      uInk: { value: new Color("#0b0b0b") },
+      // Stored as-is: the shaders write straight to the screen, so no linear conversion.
+      uPaper: { value: new Color().setHex(0xf3f0e8, LinearSRGBColorSpace) },
+      uSignal: { value: new Color().setHex(0xffbf01, LinearSRGBColorSpace) },
+      uInk: { value: new Color().setHex(0x0b0b0b, LinearSRGBColorSpace) },
     }),
     [still],
   );
@@ -124,7 +125,8 @@ export function RidgeScene({ state, quality, still = false }: Props) {
 
   useEffect(() => {
     camera.position.set(0, 3.1, 7.6);
-    camera.lookAt(0, 0.2, -2.2);
+    // Aimed low so the terrain fills the upper frame with no dead band above it.
+    camera.lookAt(0, -1.9, -2.2);
   }, [camera, size]);
 
   useFrame((_, raw) => {
