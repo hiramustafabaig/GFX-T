@@ -40,6 +40,11 @@ type Props = {
   quality: "desktop" | "mobile";
   /** Render the final composition, without time-based motion. */
   still?: boolean;
+  /**
+   * "hero": copy top-left, form low-right. "stage": copy bottom-left (closing CTA, Contact),
+   * form upper-right and a little smaller so it never meets the headline.
+   */
+  placement?: "hero" | "stage";
 };
 
 const PAPER = new Color("#f3f0e8");
@@ -56,7 +61,7 @@ export const HERO_BEATS = {
 
 const remap = (v: number, [a, b]: readonly [number, number]) => MathUtils.clamp((v - a) / (b - a), 0, 1);
 
-export function AnchorFieldScene({ state, quality, still = false }: Props) {
+export function AnchorFieldScene({ state, quality, still = false, placement = "hero" }: Props) {
   const { gl, size } = useThree();
   const group = useRef<Group>(null);
 
@@ -146,16 +151,20 @@ export function AnchorFieldScene({ state, quality, still = false }: Props) {
     // Landscape: right third, clear of the headline. Scales with aspect so it never clips.
     const aspect = size.width / size.height;
     const halfW = 3.47 * aspect; // visible half-width at z=0 (camera z 11, fov 35)
+    // Headline and copy sit top-left (landscape) / top (portrait), so the form lands low-right / low.
+    const hero = placement === "hero";
     u.uFormOffset.value.set(
-      portrait ? 0 : halfW * 0.56,
-      portrait ? 2.0 + m2 * 0.12 : 0.5 + m2 * 0.2,
+      portrait ? 0 : halfW * (hero ? 0.6 : 0.64),
+      portrait ? (hero ? -1.75 : 1.9) + m2 * 0.12 : (hero ? -0.35 : 1.05) + m2 * 0.15,
       0,
     );
-    u.uFormScale.value = portrait ? Math.min(0.8, halfW * 0.3) : Math.min(1.05, halfW * 0.2);
+    u.uFormScale.value = (portrait ? Math.min(0.8, halfW * 0.3) : Math.min(1.05, halfW * 0.2)) * (hero ? 1 : 0.82);
     const px = s.pointerActive ? s.pointer.x : 0;
     const py = s.pointerActive ? s.pointer.y : 0;
     // Ends nearly face-on (the mark stays legible) with just enough yaw to reveal its depth layers.
-    scratch.euler.set(0.1 - py * 0.1, 0.38 - 0.62 * m2 + px * 0.18, 0);
+    // A slow sway once formed lets the stacked contours parallax — depth without noise.
+    const sway = still ? 0 : Math.sin(u.uTime.value * 0.35) * 0.16 * m2;
+    scratch.euler.set(0.1 - py * 0.1, 0.38 - 0.62 * m2 + px * 0.18 + sway, 0);
     scratch.m4.makeRotationFromEuler(scratch.euler);
     u.uFormRot.value.setFromMatrix4(scratch.m4);
 

@@ -1,7 +1,8 @@
-import { clientCategories, clients, type Client } from "@/data/clients";
+import { clients, type Client } from "@/data/clients";
 import { clientsTeaser } from "@/data/company";
 import { ActionLink } from "@/components/buttons/ActionLink";
-import { RevealText } from "@/components/typography/RevealText";
+import { SectionHeading } from "@/components/typography/SectionHeading";
+import { CategoryStats } from "@/components/clients/CategoryStats";
 import { SectionLabel } from "@/components/typography/SectionLabel";
 import { ClientMark } from "@/components/clients/ClientMark";
 
@@ -16,25 +17,20 @@ export function ClientsTeaser() {
 
   return (
     <section aria-labelledby="clients-teaser-heading" className="overflow-hidden bg-paper py-[var(--spacing-section)] text-ink-950">
-      <div className="container-page grid gap-10 lg:grid-cols-12">
-        <div className="lg:col-span-6">
-          <SectionLabel index="06" tone="paper">
-            Clients
-          </SectionLabel>
-          <RevealText as="h2" id="clients-teaser-heading" className="mt-8 font-display text-h2 font-bold uppercase">
-            {clientsTeaser.heading}
-          </RevealText>
+      <div className="container-page">
+        <div className="grid gap-10 lg:grid-cols-12">
+          <div className="lg:col-span-7">
+            <SectionLabel index="06" tone="paper">
+              Clients
+            </SectionLabel>
+            <SectionHeading id="clients-teaser-heading" accent="Clients" tone="paper" className="mt-8">
+              {clientsTeaser.heading}
+            </SectionHeading>
+          </div>
+          <p className="self-end text-lead text-ink-800 lg:col-span-4 lg:col-start-9">{clientsTeaser.body}</p>
         </div>
-        <div className="flex flex-col justify-end gap-8 lg:col-span-5 lg:col-start-8">
-          <p className="text-lead text-ink-800">{clientsTeaser.body}</p>
-          <dl className="label grid grid-cols-4 gap-4 border-t border-ink-950/15 pt-5">
-            {clientCategories.map((c) => (
-              <div key={c.id}>
-                <dt className="text-ink-700">{c.label}</dt>
-                <dd className="mt-1 text-ink-950">{String(clients.filter((x) => x.category === c.id).length).padStart(2, "0")}</dd>
-              </div>
-            ))}
-          </dl>
+        <div className="mt-12 md:mt-16">
+          <CategoryStats />
         </div>
       </div>
 
@@ -49,8 +45,8 @@ export function ClientsTeaser() {
         ))}
       </div>
 
-      <div className="container-page mt-16">
-        <ActionLink href="/clients" tone="paper">
+      <div className="container-page mt-16 flex justify-center">
+        <ActionLink href="/clients" variant="primary" tone="paper" size="lg">
           View all clients
         </ActionLink>
       </div>

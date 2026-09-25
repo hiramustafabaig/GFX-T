@@ -1,58 +1,105 @@
+import Image from "next/image";
 import { navigation } from "@/data/navigation";
-import { contact, site } from "@/lib/site";
+import { contact, mailto, site } from "@/lib/site";
 import { TransitionLink } from "@/components/transitions/TransitionLink";
-import { Logo } from "@/components/brand/Logo";
+import { ActionLink } from "@/components/buttons/ActionLink";
 import { BackToTop, StudioTime } from "./FooterMeta";
+
+const mapsHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contact.address.full)}`;
+
+/** Label that rolls up to a signal-yellow copy on hover (same move as the header links). */
+function Roll({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="relative block overflow-hidden">
+      <span className="block transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:-translate-y-full">{children}</span>
+      <span aria-hidden className="absolute inset-0 block translate-y-full text-signal transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:translate-y-0">
+        {children}
+      </span>
+    </span>
+  );
+}
 
 export function Footer() {
   return (
-    <footer className="border-t border-ink-800 bg-ink-950 pb-8 pt-16 md:pt-24">
-      <div className="container-page grid gap-12 md:grid-cols-12">
-        <div className="md:col-span-5">
-          <Logo tone="paper" variant="full" className="w-[180px] md:w-[220px]" />
-          <p className="mt-6 max-w-sm text-ink-300">{site.tagline}</p>
+    <footer className="relative isolate overflow-hidden border-t border-ink-800 bg-ink-950">
+      <div aria-hidden className="absolute inset-0 -z-10 opacity-50 [background-image:radial-gradient(var(--color-ink-800)_1px,transparent_1.2px)] [background-size:28px_28px] [mask-image:linear-gradient(180deg,transparent,black_60%)]" />
+
+      <div className="container-page grid gap-12 pb-12 pt-16 md:grid-cols-2 md:pt-24 lg:grid-cols-12">
+        <div className="lg:col-span-4">
+          <p className="max-w-sm font-display text-2xl font-bold uppercase leading-tight">
+            We create. We strategize. <span className="text-signal">We elevate.</span>
+          </p>
+          <p className="mt-4 max-w-sm text-sm text-paper/60">{site.tagline}</p>
+          <div className="mt-8">
+            <ActionLink href="/contact" variant="primary">
+              Start a project
+            </ActionLink>
+          </div>
         </div>
 
-        <nav aria-label="Footer" className="md:col-span-3">
-          <p className="label mb-4 text-ink-400">Index</p>
-          <ul className="grid grid-cols-2 gap-x-6 gap-y-2 md:grid-cols-1">
+        <nav aria-label="Footer" className="lg:col-span-3 lg:col-start-5">
+          <p className="label mb-5 text-ink-400">Pages</p>
+          <ul className="grid grid-cols-2 gap-x-6 gap-y-3 lg:grid-cols-1">
             {navigation.map((item) => (
               <li key={item.href}>
-                <TransitionLink href={item.href} className="text-paper/90 transition-colors hover:text-signal">
-                  {item.label}
+                <TransitionLink href={item.href} className="group flex items-baseline gap-3 text-lg font-medium text-paper/85">
+                  <span className="label text-ink-500 transition-colors group-hover:text-signal">{item.index}</span>
+                  <Roll>{item.label}</Roll>
                 </TransitionLink>
               </li>
             ))}
           </ul>
         </nav>
 
-        <address className="not-italic md:col-span-4">
-          <p className="label mb-4 text-ink-400">Contact</p>
-          <a href={`mailto:${contact.email}`} className="block text-paper hover:text-signal">
-            {contact.email}
+        <address className="not-italic lg:col-span-3">
+          <p className="label mb-5 text-ink-400">Contact</p>
+          <a href={mailto()} className="group block text-lg font-medium">
+            <Roll>{contact.email}</Roll>
           </a>
-          <ul className="mt-3 space-y-1">
+          <ul className="mt-4 space-y-2">
             {contact.phones.map((p) => (
               <li key={p.href}>
-                <a href={p.href} className="text-ink-300 hover:text-paper">
-                  {p.display}
+                <a href={p.href} className="group inline-block text-paper/70">
+                  <Roll>{p.display}</Roll>
                 </a>
               </li>
             ))}
           </ul>
-          <p className="mt-3 text-ink-300">{contact.address.full}</p>
         </address>
+
+        <div className="lg:col-span-2">
+          <p className="label mb-5 text-ink-400">Studio</p>
+          <p className="text-paper/70">
+            {contact.address.street}
+            <br />
+            {contact.address.city}, {contact.address.country}
+          </p>
+          <a href={mapsHref} target="_blank" rel="noopener noreferrer" className="label mt-4 inline-flex items-center gap-2 text-paper hover:text-signal">
+            Open in Maps <span aria-hidden>↗</span>
+          </a>
+          <p className="label mt-6 text-ink-400">
+            <StudioTime />
+          </p>
+        </div>
       </div>
 
-      <div className="container-page label mt-16 flex flex-col justify-between gap-3 border-t border-ink-800 pt-6 text-ink-500 md:flex-row md:items-center">
-        <p>
-          © {new Date().getFullYear()} {site.name}. All rights reserved.
-        </p>
-        <p className="flex flex-wrap items-center gap-x-6 gap-y-2">
-          <StudioTime />
-          <span>Since {site.founded}</span>
-          <BackToTop />
-        </p>
+      {/* Signature: the wordmark at full width, bleeding off the bottom edge. */}
+      <div aria-hidden className="container-page">
+        <div className="group relative translate-y-[18%] select-none opacity-[0.14] transition-opacity duration-700 hover:opacity-30">
+          <Image src="/brand/gfxt-wordmark-paper.png" alt="" width={1330} height={226} sizes="100vw" className="h-auto w-full" />
+        </div>
+      </div>
+
+      <div className="relative border-t border-ink-800 bg-ink-950">
+        <div className="container-page label flex flex-col gap-3 py-5 text-ink-400 md:flex-row md:items-center md:justify-between">
+          <p>
+            © {new Date().getFullYear()} {site.name}. All rights reserved.
+          </p>
+          <p className="flex items-center gap-6">
+            <span>Since {site.founded}</span>
+            <BackToTop />
+          </p>
+        </div>
       </div>
     </footer>
   );

@@ -88,7 +88,7 @@ export function FormStage({ drive, className }: Props) {
   return (
     <div ref={ref} aria-hidden className={className ?? "absolute inset-0"}>
       {near && webgl === true && (
-        <AnchorFieldCanvas state={state} quality={mobile ? "mobile" : "desktop"} still={reduced} />
+        <AnchorFieldCanvas state={state} quality={mobile ? "mobile" : "desktop"} still={reduced} placement="stage" />
       )}
       {webgl === false && <HeroFallback />}
     </div>

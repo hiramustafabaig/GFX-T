@@ -25,11 +25,9 @@ export default function ContactPage() {
           <FormStage drive="intro" />
         </div>
         <div className="container-page flex min-h-svh flex-col justify-end pb-12 pt-[45svh] md:pb-16 lg:pt-[calc(var(--header-h)+8rem)]">
-          <h1 id="contact-heading" className="label mb-8 flex items-center gap-3 text-ink-300">
-            <span className="text-paper">07</span>
-            <span aria-hidden className="h-px w-10 bg-ink-700" />
+          <SectionLabel as="h1" id="contact-heading" index="07" className="mb-8 self-start">
             Contact Us
-          </h1>
+          </SectionLabel>
           <RevealText
             as="p"
             immediate

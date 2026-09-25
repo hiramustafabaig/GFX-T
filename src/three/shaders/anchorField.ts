@@ -60,7 +60,7 @@ const anchorAttributes = /* glsl */ `
     );
     vec3 a = aPosA + drift * 0.22;
     vec3 b = aPosB + drift * 0.03;
-    vec3 c = mix(placeForm(aPosC), aPosC, aFree) + drift * mix(0.012, 0.2, aFree);
+    vec3 c = mix(placeForm(aPosC), aPosC, aFree) + drift * mix(0.0, 0.2, aFree);
     tangent = normalize(mix(mix(aTanA, aTanB, mAB), uFormRot * aTanC, mBC) + 1e-5);
     return mix(mix(a, b, mAB), c, mBC);
   }
@@ -72,9 +72,14 @@ const anchorAttributes = /* glsl */ `
   }
 
   float anchorAlpha(float mAB, float mBC) {
-    float structured = mix(0.7, mix(0.2, 0.95, aLayer), mBC);
+    // In the final form only the front layer keeps (every other) anchor; the layers behind
+    // it are carried by their contours alone, so the mark reads as clean stacked lines.
+    float front = step(0.99, aLayer) * step(fract(aRand * 13.7), 0.5);
+    float structured = mix(0.7, front * 0.95, mBC);
     float base = mix(0.78, structured, mAB);
-    return mix(base, 0.3, aFree);
+    // Atmospheric anchors dissolve as the form assembles.
+    float free = 0.3 * (1.0 - smoothstep(0.0, 0.7, uMorph2));
+    return mix(base, free, aFree);
   }
 `;
 
@@ -200,7 +205,8 @@ export const pathsVertex = /* glsl */ `
     vDraw = clamp((uDraw - aRand * 0.35) / 0.65, 0.0, 1.0);
 
     float selected = mix(aSelB, aSelC, mBC);
-    float structured = mix(0.16, mix(0.1, 0.78, aLayer * aLayer), mBC);
+    // Depth cue: contours fade toward the back of the stack.
+    float structured = mix(0.16, mix(0.08, 0.9, aLayer * aLayer * aLayer), mBC);
     vAlpha = mix(structured, 0.95, selected) * uIntro;
     vColor = mix(uPaper, uSignal, selected);
   }

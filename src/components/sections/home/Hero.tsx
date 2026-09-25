@@ -40,6 +40,9 @@ export function Hero() {
   const [scrollBeat, setBeat] = useState(0);
   // Without motion the field shows its final form, so the headline selects the matching line.
   const beat = reduced ? 2 : scrollBeat;
+  // Hovering a line selects it, overriding the scroll beat while the pointer is on it.
+  const [hovered, setHovered] = useState<number | null>(null);
+  const selected = hovered ?? beat;
   const [webgl, setWebgl] = useState<boolean | null>(null);
 
   // eslint-disable-next-line react-hooks/set-state-in-effect -- capability probe runs client-side only
@@ -92,13 +95,13 @@ export function Hero() {
       lineRefs.current.forEach((line, i) => {
         if (!line) return;
         gsap.to(line, {
-          "--wdth": i === beat ? BEAT_WIDTH[i] : 100,
-          duration: reduced ? 0 : motion.duration.scene,
+          "--wdth": i === selected ? BEAT_WIDTH[i] : 100,
+          duration: reduced ? 0 : hovered !== null ? motion.duration.slow : motion.duration.scene,
           ease: motion.ease.inOut,
         });
       });
     },
-    { dependencies: [beat, reduced] },
+    { dependencies: [selected, reduced] },
   );
 
   // Pointer → NDC for the pen-tool interaction; coordinates readout like a design tool.
@@ -134,64 +137,69 @@ export function Hero() {
           aria-hidden
           className="absolute inset-0 opacity-60 [background-image:radial-gradient(var(--color-ink-700)_1px,transparent_1.2px)] [background-size:32px_32px] [mask-image:radial-gradient(ellipse_at_60%_40%,black,transparent_75%)]"
         />
-        {/* The field recedes on the copy side (left) and stays vivid where the form lands (right). */}
-        <div className="absolute inset-0 [mask-image:linear-gradient(180deg,black_0%,black_38%,rgb(0_0_0/0.22)_62%)] lg:[mask-image:linear-gradient(90deg,rgb(0_0_0/0.3)_0%,rgb(0_0_0/0.45)_30%,black_58%)]">
+        {/* The field recedes behind the copy (top / left) and stays vivid where the form lands. */}
+        <div className="absolute inset-0 [mask-image:linear-gradient(180deg,rgb(0_0_0/0.3)_0%,rgb(0_0_0/0.45)_45%,black_72%)] lg:[mask-image:linear-gradient(90deg,rgb(0_0_0/0.3)_0%,rgb(0_0_0/0.45)_30%,black_58%)]">
           {webgl === true && (
             <AnchorFieldCanvas state={fieldState} quality={mobile ? "mobile" : "desktop"} still={reduced} />
           )}
           {webgl === false && <HeroFallback />}
         </div>
 
-        {/* Legibility floor under the headline; the only gradient in the hero. */}
+        {/* Legibility veil behind the copy: from the top-left on desktop, from the top on mobile. */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-ink-950 via-ink-950/70 to-transparent"
+          className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,var(--color-ink-950)_0%,rgb(11_11_11/0.85)_45%,transparent_70%)] lg:bg-[linear-gradient(100deg,var(--color-ink-950)_0%,rgb(11_11_11/0.75)_42%,transparent_65%)]"
         />
 
-        {/* Mobile order: [form] headline, tagline, beats. Desktop: tagline top-left, form right, headline bottom-left. */}
-        <div className="container-page relative flex h-full flex-col pb-6 pt-[var(--header-h)] md:pb-10">
-          <div aria-hidden className="order-first flex-1 lg:order-2" />
+        {/* Order: meta → headline → tagline + actions → beat bar. The form fills the space low-right. */}
+        <div className="container-page relative flex h-full flex-col pb-6 pt-[calc(var(--header-h)+clamp(1rem,4svh,3rem))] md:pb-8">
+          <ul data-hero-fade aria-label="About GFX-T" className="label flex flex-wrap items-center gap-2">
+            <li className="flex items-center gap-2 bg-signal px-3 py-1.5 font-medium text-ink-950">
+              <span aria-hidden className="size-1.5 bg-ink-950" />
+              {site.descriptor}
+            </li>
+            <li className="border border-paper/20 px-3 py-1.5 text-paper/85 backdrop-blur-sm">Lahore, Pakistan</li>
+            <li className="border border-paper/20 px-3 py-1.5 text-paper/85 backdrop-blur-sm">
+              Est. <span className="text-signal">{site.founded}</span>
+            </li>
+          </ul>
 
-          <div className="order-1 lg:order-3">
-            <p data-hero-fade className="label mb-5 flex items-center gap-3 text-ink-300 md:mb-7">
-              <span aria-hidden className="size-1.5 bg-signal" />
-              {site.descriptor} — Lahore, Pakistan — Est. {site.founded}
-            </p>
-            <h1
-              id="hero-heading"
-              className="whitespace-nowrap font-display text-[9.2vw] font-bold uppercase leading-[0.92] tracking-[-0.02em] md:text-[clamp(2.6rem,7.2vw,9rem)]"
-            >
-              {site.heroHeading.map((line, i) => {
-                const active = beat === i;
-                return (
-                  <span key={line} className="relative block w-fit">
-                    <span className="reveal-mask">
-                      <span
-                        data-hero-line
-                        ref={(el) => {
-                          lineRefs.current[i] = el;
-                        }}
-                        style={{ "--wdth": 100 } as React.CSSProperties}
-                        className={cn(
-                          "inline-block pr-[0.06em] transition-colors duration-700 [font-variation-settings:'wdth'_var(--wdth)]",
-                          active ? "text-paper" : "text-ink-500",
-                        )}
-                      >
-                        {line}
-                      </span>
+          <h1
+            id="hero-heading"
+            // Sized by width AND height so all three lines always fit the stage.
+            className="mt-5 whitespace-nowrap font-display text-[min(10.4vw,7.4svh)] font-extrabold uppercase leading-[0.9] tracking-[-0.025em] md:mt-7 md:text-[min(6.6vw,11svh)]"
+            onPointerLeave={() => setHovered(null)}
+          >
+            {site.heroHeading.map((line, i) => {
+              const active = selected === i;
+              return (
+                <span key={line} className="relative block w-fit" onPointerEnter={() => setHovered(i)}>
+                  <span className="reveal-mask">
+                    <span
+                      data-hero-line
+                      ref={(el) => {
+                        lineRefs.current[i] = el;
+                      }}
+                      style={{ "--wdth": 100 } as React.CSSProperties}
+                      className={cn(
+                        "inline-block cursor-default pr-[0.06em] transition-colors duration-500 [font-variation-settings:'wdth'_var(--wdth)]",
+                        hovered === i ? "text-signal" : active ? "text-paper" : "text-ink-500",
+                      )}
+                    >
+                      {line}
                     </span>
-                    <SelectionBox visible={active} />
                   </span>
-                );
-              })}
-            </h1>
-          </div>
+                  <SelectionBox visible={active} />
+                </span>
+              );
+            })}
+          </h1>
 
-          <div className="order-2 mt-8 max-w-md lg:order-1 lg:mt-[7vh] lg:max-w-sm xl:max-w-md">
-            <p data-hero-fade className="text-lead text-paper/85">
+          <div className="mt-7 flex flex-col gap-6 md:mt-9 lg:flex-row lg:items-end lg:gap-10">
+            <p data-hero-fade className="max-w-md text-lead text-paper/85">
               {site.tagline}
             </p>
-            <div data-hero-fade className="mt-7 flex flex-wrap gap-3">
+            <div data-hero-fade className="flex flex-wrap gap-3">
               <ActionLink href="/contact" variant="primary">
                 Start a project
               </ActionLink>
@@ -199,10 +207,12 @@ export function Hero() {
             </div>
           </div>
 
+          <div aria-hidden className="flex-1" />
+
           <div
             data-hero-fade
             aria-hidden
-            className="label order-3 mt-8 flex items-center justify-between border-t border-ink-800 pt-4 text-ink-400 lg:order-4 lg:mt-10"
+            className="label flex items-center justify-between border-t border-ink-800 pt-4 text-ink-400"
           >
             <span className="flex items-center gap-6">
               {BEAT_LABELS.map((label, i) => (

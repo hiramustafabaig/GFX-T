@@ -6,7 +6,7 @@ import { portfolio, portfolioIntro } from "@/data/portfolio";
 import { gsap, useGSAP, registerGsap } from "@/lib/motion";
 import { useReducedMotion } from "@/lib/device";
 import { ActionLink } from "@/components/buttons/ActionLink";
-import { RevealText } from "@/components/typography/RevealText";
+import { SectionHeading } from "@/components/typography/SectionHeading";
 import { SectionLabel } from "@/components/typography/SectionLabel";
 import { TransitionLink } from "@/components/transitions/TransitionLink";
 
@@ -51,14 +51,16 @@ export function WorkTeaser() {
       <div className="container-page grid gap-10 lg:grid-cols-12">
         <div className="lg:col-span-6">
           <SectionLabel index="05">Selected work</SectionLabel>
-          <RevealText as="h2" id="work-heading" className="mt-8 font-display text-h2 font-bold uppercase">
+          <SectionHeading id="work-heading" accent="Portfolio" className="mt-8">
             Our Portfolio
-          </RevealText>
+          </SectionHeading>
         </div>
         <div className="flex flex-col justify-end gap-8 lg:col-span-5 lg:col-start-8">
           <p className="text-lead text-paper/85">{portfolioIntro}</p>
           <div>
-            <ActionLink href="/portfolio">View the portfolio</ActionLink>
+            <ActionLink href="/portfolio" variant="primary" size="lg">
+              View the portfolio
+            </ActionLink>
           </div>
         </div>
       </div>
