@@ -78,8 +78,11 @@ const organizationJsonLd = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${archivo.variable} ${inter.variable} ${jetbrains.variable}`}>
-      <body>
+    // suppressHydrationWarning: browser extensions (Grammarly, ColorZilla, password managers…)
+    // add attributes to <html>/<body> before React loads. This ignores attribute differences on
+    // these two elements only; mismatches anywhere inside the page are still reported.
+    <html lang="en" className={`${archivo.variable} ${inter.variable} ${jetbrains.variable}`} suppressHydrationWarning>
+      <body suppressHydrationWarning>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
