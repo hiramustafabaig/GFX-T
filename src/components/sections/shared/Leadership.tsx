@@ -13,7 +13,7 @@ import { SlideInPair } from "./SlideInPair";
  */
 export function Leadership({ index, compact, className }: { index: string; compact?: boolean; className?: string }) {
   return (
-    <section aria-labelledby="leadership-heading" className={cn("relative isolate bg-ink-900", compact ? "py-10 md:py-14" : "pb-10 pt-16 md:pb-14 md:pt-24", className)}>
+    <section aria-labelledby="leadership-heading" className={cn("relative isolate overflow-x-clip bg-ink-900", compact ? "py-10 md:py-14" : "pb-10 pt-16 md:pb-14 md:pt-24", className)}>
       <MobileShapes variant={2} />
       <div className="container-page">
         <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
@@ -24,8 +24,8 @@ export function Leadership({ index, compact, className }: { index: string; compa
             </SectionHeading>
           </div>
           <div>
-            <ActionLink href="/management" variant="primary" size="lg">
-              Meet our CEO &amp; COO
+            <ActionLink href="/management" variant="primary" size="lg" wrap>
+              Meet our CEO &amp; Founder and COO
             </ActionLink>
           </div>
         </div>

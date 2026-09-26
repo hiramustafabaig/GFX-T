@@ -4,6 +4,7 @@ import { contact, mailto, site } from "@/lib/site";
 import { TransitionLink } from "@/components/transitions/TransitionLink";
 import { ActionLink } from "@/components/buttons/ActionLink";
 import { BackToTop, StudioTime } from "./FooterMeta";
+import { SocialLinks } from "@/components/ui/SocialLinks";
 
 const mapsHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contact.address.full)}`;
 
@@ -72,6 +73,7 @@ export function Footer() {
               </li>
             ))}
           </ul>
+          <SocialLinks className="mt-6" />
         </address>
 
         <div className="lg:col-span-2">

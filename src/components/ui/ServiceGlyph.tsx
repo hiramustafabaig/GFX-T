@@ -16,6 +16,25 @@ type Stroke = { d: string; selected?: boolean };
 type Glyph = { strokes: Stroke[]; anchors: [number, number][]; handles?: [number, number][] };
 
 const GLYPHS: Record<GlyphId, Glyph> = {
+  // Photography — a camera body with its lens selected.
+  camera: {
+    strokes: [
+      { d: "M6 16 H14 L17 11 H31 L34 16 H42 V38 H6 Z" },
+      { d: "M24 18 A9 9 0 1 1 23.99 18", selected: true },
+      { d: "M24 23 A4 4 0 1 1 23.99 23" },
+    ],
+    anchors: [[36, 21]],
+  },
+  // Videography — a frame with film edges and the play mark selected.
+  play: {
+    strokes: [
+      { d: "M6 12 H42 V36 H6 Z" },
+      { d: "M6 17 H42" },
+      { d: "M6 31 H42" },
+      { d: "M21 19.5 L29 24 L21 28.5 Z", selected: true },
+    ],
+    anchors: [[6, 12], [42, 36]],
+  },
   // Branding & Design — a Bézier segment with both handles out.
   bezier: {
     strokes: [

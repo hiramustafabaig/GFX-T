@@ -54,7 +54,7 @@ export function LeaderProfile({ leader, index }: { leader: Leader; index: number
       ref={ref}
       id={leader.slug}
       aria-labelledby={`${leader.slug}-name`}
-      className={cn("py-12 md:py-[var(--spacing-section)]", paper ? "bg-paper text-ink-950" : "bg-ink-950 text-paper")}
+      className={cn("overflow-x-clip py-12 md:py-[var(--spacing-section)]", paper ? "bg-paper text-ink-950" : "bg-ink-950 text-paper")}
     >
       <div className="container-page grid gap-6 md:grid-cols-12 md:gap-x-8 lg:gap-x-10">
         <figure className={cn("md:sticky md:top-[calc(var(--header-h)+2rem)] md:col-span-5 md:self-start", flip && "md:order-2 md:col-start-8")}>

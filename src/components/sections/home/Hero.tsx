@@ -164,7 +164,7 @@ export function Hero() {
           <h1
             id="hero-heading"
             // Sized by width AND height so all three lines always fit the stage.
-            className="mt-5 whitespace-nowrap font-display text-[min(10.4vw,7.4svh)] font-extrabold uppercase leading-[0.9] tracking-[-0.025em] md:mt-7 md:text-[min(5.8vw,10svh)]"
+            className="mt-5 whitespace-nowrap font-display text-[min(11.4vw,8.6svh)] font-extrabold uppercase leading-[0.9] tracking-[-0.03em] md:mt-7 md:text-[min(7.2vw,12.5svh)]"
             onPointerLeave={() => setHovered(null)}
           >
             {site.heroHeading.map((line, i) => {
@@ -180,7 +180,7 @@ export function Hero() {
                       style={{ "--wdth": 100 } as React.CSSProperties}
                       className={cn(
                         "inline-block cursor-default pr-[0.06em] transition-colors duration-500 [font-variation-settings:'wdth'_var(--wdth)]",
-                        hovered === i ? "text-signal" : active ? "text-paper" : "text-ink-500",
+                        hovered === i ? "text-signal" : active ? "text-paper" : "text-ink-400",
                       )}
                     >
                       {line}
@@ -195,7 +195,7 @@ export function Hero() {
             <p data-hero-fade className="max-w-md text-base text-paper/85 md:text-lead">
               {site.tagline}
             </p>
-            <div data-hero-fade className="flex gap-2 md:gap-3">
+            <div data-hero-fade className="flex flex-wrap gap-2 md:gap-3">
               <ActionLink href="/contact" variant="primary" size={mobile ? "sm" : "md"}>
                 Start a project
               </ActionLink>

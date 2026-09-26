@@ -23,8 +23,17 @@ export const contact = {
   phones: [
     { display: "+92 321 4006247", href: "tel:+923214006247" },
     { display: "+92 324 0321027", href: "tel:+923240321027" },
-    { display: "+92 300 9453725", href: "tel:+923009453725", label: "CEO direct line" },
+    { display: "+92 300 9453725", href: "tel:+923009453725", label: "CEO & Founder direct line" },
   ] satisfies Phone[],
+  /**
+   * Social profiles. `href: null` renders the icon without a link until the handle is supplied —
+   * then set the full profile URL here and every icon on the site becomes a link.
+   */
+  social: [
+    { name: "Instagram", href: null },
+    { name: "LinkedIn", href: null },
+    { name: "Facebook", href: null },
+  ] as { name: "Instagram" | "LinkedIn" | "Facebook"; href: string | null }[],
   /** The number the Word doc names for "book a call directly with our CEO". */
   ceoPhone: { display: "+92 300 9453725", href: "tel:+923009453725" } satisfies Phone,
   address: {

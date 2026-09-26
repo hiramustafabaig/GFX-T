@@ -96,7 +96,7 @@ export function ServicesTeaser() {
 
             <div aria-hidden className="relative mt-10 hidden aspect-[5/4] max-w-md overflow-hidden bg-signal p-6 lg:flex lg:flex-col lg:justify-between">
               <div className="label flex justify-between text-ink-950">
-                <span>{current.index} / 06</span>
+                <span>{current.index} / {String(services.length).padStart(2, "0")}</span>
                 <span>Now viewing</span>
               </div>
               <ServiceGlyph glyph={current.glyph} tone="paper" play replayKey={active} className="mx-auto size-32" />
