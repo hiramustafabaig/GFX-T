@@ -29,31 +29,48 @@ const ICONS: Record<Network, React.ReactNode> = {
 type Props = { className?: string; size?: "md" | "lg" };
 
 /**
- * Instagram / LinkedIn / Facebook. Profiles without a URL yet (see `contact.social`) render as
- * non-link icons, so there are never dead links; they become links as soon as a URL is set.
+ * Instagram / LinkedIn / Facebook as yellow icon tiles. Hover: the tile fills yellow, lifts, and
+ * the icon turns ink and tilts. Profiles without a URL (see `contact.social`) render as
+ * non-link icons, so there are never dead links.
  */
 export function SocialLinks({ className, size = "md" }: Props) {
-  const box = size === "lg" ? "size-12" : "size-11";
+  const box = size === "lg" ? "size-14" : "size-12";
+  const glyph = size === "lg" ? "size-7" : "size-6";
   return (
-    <ul className={cn("flex items-center gap-2", className)} aria-label="Social media">
+    <ul className={cn("flex items-center gap-3", className)} aria-label="Social media">
       {contact.social.map((s) => {
         const icon = (
-          <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+          <svg
+            viewBox="0 0 24 24"
+            className={cn(glyph, "transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:-rotate-12 group-hover:scale-110")}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden
+          >
             {ICONS[s.name]}
           </svg>
         );
         const cls = cn(
-          "grid place-items-center border border-ink-700 text-paper transition-colors duration-300 hover:border-signal hover:bg-signal hover:text-ink-950",
+          "group relative grid place-items-center overflow-hidden border border-signal/60 text-signal transition-[transform,border-color,color,box-shadow] duration-500 ease-[var(--ease-out-expo)] hover:-translate-y-1 hover:border-signal hover:text-ink-950 hover:shadow-[0_10px_24px_rgb(255_191_1/0.35)]",
           box,
         );
+        // Yellow fill rises from the bottom on hover.
+        const fill = (
+          <span aria-hidden className="absolute inset-0 -z-10 origin-bottom scale-y-0 bg-signal transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:scale-y-100" />
+        );
         return (
-          <li key={s.name}>
+          <li key={s.name} className="isolate">
             {s.href ? (
-              <a href={s.href} target="_blank" rel="noopener noreferrer" aria-label={`GFX-T on ${s.name}`} className={cls}>
+              <a href={s.href} target="_blank" rel="noopener noreferrer" aria-label={`GFX-T on ${s.name}`} className={cn(cls, "isolate")}>
+                {fill}
                 {icon}
               </a>
             ) : (
-              <span role="img" aria-label={`${s.name} (coming soon)`} title={`${s.name} — coming soon`} className={cls}>
+              <span role="img" aria-label={`${s.name} (coming soon)`} title={`${s.name} — coming soon`} className={cn(cls, "isolate")}>
+                {fill}
                 {icon}
               </span>
             )}

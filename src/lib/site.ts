@@ -19,7 +19,7 @@ export const site = {
 export type Phone = { display: string; href: string; label?: string };
 
 export const contact = {
-  email: "info@gfxt.com",
+  email: "info@gfx-t.com",
   phones: [
     { display: "+92 321 4006247", href: "tel:+923214006247" },
     { display: "+92 324 0321027", href: "tel:+923240321027" },
@@ -30,9 +30,9 @@ export const contact = {
    * then set the full profile URL here and every icon on the site becomes a link.
    */
   social: [
-    { name: "Instagram", href: null },
-    { name: "LinkedIn", href: null },
-    { name: "Facebook", href: null },
+    { name: "Instagram", href: "https://www.instagram.com/gfx.t_/" },
+    { name: "LinkedIn", href: "https://www.linkedin.com/company/gfx-t/" },
+    { name: "Facebook", href: "https://www.facebook.com/profile.php?id=61594761962092" },
   ] as { name: "Instagram" | "LinkedIn" | "Facebook"; href: string | null }[],
   /** The number the Word doc names for "book a call directly with our CEO". */
   ceoPhone: { display: "+92 300 9453725", href: "tel:+923009453725" } satisfies Phone,

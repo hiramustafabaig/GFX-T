@@ -54,6 +54,6 @@ Originals go in `assets-src/` (git-ignored); `npm run images` writes optimised W
 
 **Portfolio** — `assets-src/portfolio/<project-slug>/*.jpg`, run `npm run images`, then add an entry to `portfolio` in `src/data/portfolio.ts` (cover + media with the printed width/height). The exhibition, filters and viewer switch on automatically; while the list is empty the page shows an honest "being installed" state.
 
-## Contact form
+## Contact & social
 
-There is no mail backend yet: the brief form composes an email to `info@gfxt.com` in the visitor's own mail app, and says so. Replace `send` in `src/components/contact/ContactForm.tsx` with a Server Action once a mail provider is chosen.
+Email, phone numbers, address and social profile URLs live in `src/lib/site.ts` (`contact`). The Contact page and footer read from there, so updating a detail updates it everywhere.

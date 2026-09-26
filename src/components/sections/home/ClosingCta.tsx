@@ -15,7 +15,7 @@ export function ClosingCta() {
   return (
     <section aria-labelledby="closing-heading" className="relative isolate min-h-svh overflow-hidden bg-ink-950">
       {/* Signal Ribbon across the upper part of the frame. */}
-      <div className="absolute inset-x-0 top-0 -z-10 h-[48%] [mask-image:linear-gradient(180deg,transparent_0%,black_10%,black_70%,transparent_100%)] md:h-[58%]">
+      <div className="absolute inset-x-0 top-0 -z-10 h-[48%] [mask-image:linear-gradient(180deg,transparent_0%,black_4%,black_70%,transparent_100%)] md:h-[58%]">
         <RibbonStage />
       </div>
 
