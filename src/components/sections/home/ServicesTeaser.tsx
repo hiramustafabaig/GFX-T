@@ -122,7 +122,7 @@ export function ServicesTeaser() {
                   href={`/services#${s.slug}`}
                   onPointerEnter={() => setActive(i)}
                   onFocus={() => setActive(i)}
-                  className="group relative isolate grid grid-cols-[auto_1fr_auto] items-center gap-5 overflow-hidden px-3 py-6 md:gap-8 md:px-5 md:py-8"
+                  className="group relative isolate grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 overflow-hidden px-2 py-6 sm:gap-5 sm:px-3 md:gap-8 md:px-5 md:py-8"
                 >
                   {/* Yellow wipe on hover / when active */}
                   <span
@@ -136,13 +136,13 @@ export function ServicesTeaser() {
                     {s.index}
                   </span>
                   <span>
-                    <span className="block font-display text-[clamp(1.25rem,0.9rem+1.3vw,2.1rem)] font-extrabold uppercase leading-none tracking-[-0.01em]">
+                    <span className="block break-words font-display text-[clamp(1.1rem,0.8rem+1.3vw,2.1rem)] font-extrabold uppercase leading-none tracking-[-0.01em] [hyphens:auto]">
                       {s.title}
                     </span>
                     <span className="mt-2 block max-w-lg text-sm leading-relaxed text-ink-800">{s.description}</span>
                   </span>
                   <span className="flex items-center gap-4">
-                    <ServiceGlyph glyph={s.glyph} tone="paper" play={on} className="size-8 md:size-10" />
+                    <ServiceGlyph glyph={s.glyph} tone="paper" play={on} className="hidden size-8 min-[400px]:block md:size-10" />
                     <span className={cn("grid size-10 place-items-center transition-colors duration-500", on ? "bg-ink-950 text-signal" : "border border-ink-950/25")}>
                       <svg viewBox="0 0 16 16" className={cn("size-3.5 transition-transform duration-500", on ? "rotate-0" : "-rotate-45")} fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
                         <path d="M2 8h11M9 4l4 4-4 4" />

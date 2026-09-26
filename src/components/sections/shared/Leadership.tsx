@@ -16,7 +16,7 @@ export function Leadership({ index, compact, className }: { index: string; compa
     <section aria-labelledby="leadership-heading" className={cn("relative isolate overflow-x-clip bg-ink-900", compact ? "py-10 md:py-14" : "pb-10 pt-16 md:pb-14 md:pt-24", className)}>
       <MobileShapes variant={2} />
       <div className="container-page">
-        <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <SectionLabel index={index}>Leadership</SectionLabel>
             <SectionHeading id="leadership-heading" accent="Management" size={compact ? "md" : "lg"} className={compact ? "mt-6" : "mt-8"}>
