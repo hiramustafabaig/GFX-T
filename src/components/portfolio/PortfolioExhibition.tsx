@@ -86,7 +86,7 @@ export function PortfolioExhibition({ projects = portfolio }: { projects?: Portf
 
       <div className="mt-12 flex flex-col gap-6 border border-ink-800 bg-ink-900 p-6 md:flex-row md:items-center md:justify-between md:p-8">
         <p className="max-w-md text-paper/80">{portfolioNote}</p>
-        <ActionLink href={mailto("Portfolio request")} variant="primary">
+        <ActionLink href={mailto("Portfolio request")} variant="primary" wrap>
           Request the complete portfolio
         </ActionLink>
       </div>

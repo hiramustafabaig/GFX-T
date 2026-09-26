@@ -13,7 +13,7 @@ type Props = {
   /** The surface the control sits on. */
   tone?: "ink" | "paper";
   size?: "sm" | "md" | "lg";
-  /** Let a long label break onto two lines on narrow screens (single line from `sm` up). */
+  /** Let a long label break onto two lines on phones and tablets (single line from `lg` up). */
   wrap?: boolean;
   className?: string;
 };
@@ -46,12 +46,12 @@ export function ActionLink({ href, children, variant = "ghost", tone = "ink", si
 
   const classes = cn(
     "group label relative isolate inline-flex items-center overflow-hidden font-medium transition-[color,border-color] duration-500",
-    wrap ? "max-w-full whitespace-normal py-2 text-left sm:shrink-0 sm:whitespace-nowrap" : "shrink-0 whitespace-nowrap",
+    wrap ? "max-w-full whitespace-normal py-2 text-left lg:shrink-0 lg:whitespace-nowrap" : "shrink-0 whitespace-nowrap",
     size === "lg"
-      ? cn("gap-4 pl-7 pr-2", wrap ? "min-h-14 sm:h-14" : "h-14")
+      ? cn("gap-4 pl-7 pr-2", wrap ? "min-h-14 lg:h-14" : "h-14")
       : size === "sm"
-        ? cn("gap-3 pl-4 pr-1", wrap ? "min-h-11 sm:h-11" : "h-11")
-        : cn("gap-4 pl-5 pr-1.5", wrap ? "min-h-12 sm:h-12" : "h-12"),
+        ? cn("gap-3 pl-4 pr-1", wrap ? "min-h-11 lg:h-11" : "h-11")
+        : cn("gap-4 pl-5 pr-1.5", wrap ? "min-h-12 lg:h-12" : "h-12"),
     skin.base,
     skin.hoverText,
     className,

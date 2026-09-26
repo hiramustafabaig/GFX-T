@@ -50,6 +50,9 @@ export const metadata: Metadata = {
     description,
   },
   formatDetection: { telephone: false },
+  // The site is already dark: ask the Dark Reader extension not to restyle it. Its edits to SVG
+  // icons and inline styles land before React hydrates and cause hydration mismatch errors.
+  other: { "darkreader-lock": "true" },
 };
 
 export const viewport: Viewport = {
