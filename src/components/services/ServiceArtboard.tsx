@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { Service } from "@/data/services";
+import { services, type Service } from "@/data/services";
 import { ServiceGlyph } from "@/components/ui/ServiceGlyph";
 import { SelectionBox } from "@/components/ui/SelectionBox";
 import { cn } from "@/lib/cn";
@@ -57,7 +57,7 @@ export function ServiceArtboard({ service }: { service: Service }) {
 
       <div className="relative flex items-start justify-between">
         <span className="label text-ink-400">
-          <span className={selected ? "text-signal" : "text-paper"}>{service.index}</span> / 06
+          <span className={selected ? "text-signal" : "text-paper"}>{service.index}</span> / {String(services.length).padStart(2, "0")}
         </span>
       </div>
 

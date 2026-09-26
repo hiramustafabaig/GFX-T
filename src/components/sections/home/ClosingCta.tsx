@@ -4,6 +4,7 @@ import { ActionLink } from "@/components/buttons/ActionLink";
 import { RevealText } from "@/components/typography/RevealText";
 import { SectionLabel } from "@/components/typography/SectionLabel";
 import { RibbonStage } from "@/three/RibbonStage";
+import { SocialLinks } from "@/components/ui/SocialLinks";
 
 /**
  * STILL THINKING? — the closing frame. Above the copy flows the Signal Ribbon: a band of fine
@@ -38,10 +39,11 @@ export function ClosingCta() {
             <RevealText split="words" className="text-lead text-paper/85">
               {closingCta.body}
             </RevealText>
-            <div className="mt-8 flex justify-center md:justify-start">
+            <div className="mt-8 flex flex-col items-center gap-6 md:items-start">
               <ActionLink href="/contact" variant="primary" size="lg">
                 Contact us
               </ActionLink>
+              <SocialLinks />
             </div>
           </div>
           <address className="grid gap-6 not-italic sm:grid-cols-2 md:col-span-7">
@@ -50,7 +52,7 @@ export function ClosingCta() {
               <span className="mt-2 block text-h3 leading-tight transition-colors group-hover:text-signal">{contact.email}</span>
             </a>
             <a href={contact.ceoPhone.href} className="group block border-l-2 border-ink-700 pl-5 transition-colors hover:border-signal">
-              <span className="label block text-ink-400">Book a call with our CEO</span>
+              <span className="label block text-ink-400">Book a call with our CEO &amp; Founder</span>
               <span className="mt-2 block text-h3 leading-tight transition-colors group-hover:text-signal">{contact.ceoPhone.display}</span>
             </a>
           </address>

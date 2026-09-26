@@ -11,21 +11,21 @@ export type Leader = {
   surface: "paper" | "ink";
 };
 
-export const managementHeading = "Introduction of Our CEO & COO";
+export const managementHeading = "Introduction of Our CEO & Founder and COO";
 
 export const leaders: Leader[] = [
   {
     slug: "syed-zamir-ahmad-naushahi",
     name: "Syed Zamir Ahmad Naushahi",
-    role: "CEO",
-    bio: "With over three decades of experience in the media industry, Syed Zamir Ahmad Naushahi founded GFX-T with a vision to redefine branding, design, and digital marketing. Having also lived and worked in the USA, he brings valuable international experience and global perspective to his work. As CEO, his leadership and expertise continue to drive innovation, delivering impactful solutions for businesses.",
+    role: "CEO & Founder",
+    bio: "With over three decades of experience in the media industry, Syed Zamir Ahmad Naushahi founded GFX-T with a vision to redefine branding, design, and digital marketing. Having also lived and worked in the USA, he brings valuable international experience and global perspective to his work. As CEO and Founder, his leadership and expertise continue to drive innovation, delivering impactful solutions for businesses.",
     experience: { value: "30+", unit: "years in media" },
     reach: ["USA"],
     portrait: {
       src: "/team/syed-zamir-ahmad-naushahi.jpg",
       width: 1600,
       height: 2000,
-      alt: "Portrait of Syed Zamir Ahmad Naushahi, CEO of GFX-T, seated in a grey suit",
+      alt: "Portrait of Syed Zamir Ahmad Naushahi, CEO and Founder of GFX-T, seated in a grey suit",
     },
     surface: "paper",
   },

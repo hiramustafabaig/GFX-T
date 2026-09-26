@@ -4,7 +4,9 @@ export type ServiceGlyph =
   | "cursor"
   | "grid"
   | "registration"
-  | "broadcast";
+  | "broadcast"
+  | "camera"
+  | "play";
 
 export type Service = {
   slug: string;
@@ -66,5 +68,22 @@ export const services: Service[] = [
     description:
       "Managing media outreach, press releases, and brand reputation to foster strong public perception and media presence.",
     glyph: "broadcast",
+  },
+  // Added at the client's request (not in the original content document); copy to be confirmed.
+  {
+    slug: "photography",
+    index: "07",
+    title: "Photography",
+    description:
+      "Capturing products, people, spaces, and events in striking imagery that brings a brand's story to life across every platform.",
+    glyph: "camera",
+  },
+  {
+    slug: "videography",
+    index: "08",
+    title: "Videography",
+    description:
+      "Producing engaging videos, from brand films and commercials to social media reels, that capture attention and tell a brand's story.",
+    glyph: "play",
   },
 ];

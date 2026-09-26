@@ -13,6 +13,8 @@ type Props = {
   /** The surface the control sits on. */
   tone?: "ink" | "paper";
   size?: "sm" | "md" | "lg";
+  /** Let a long label break onto two lines on narrow screens (single line from `sm` up). */
+  wrap?: boolean;
   className?: string;
 };
 
@@ -22,7 +24,7 @@ type Props = {
  * links run through the page transition; mailto/tel/external links are plain anchors. On fine
  * pointers the whole control leans toward the cursor.
  */
-export function ActionLink({ href, children, variant = "ghost", tone = "ink", size = "md", className }: Props) {
+export function ActionLink({ href, children, variant = "ghost", tone = "ink", size = "md", wrap = false, className }: Props) {
   const magnetRef = useRef<HTMLSpanElement>(null);
   useMagnetic(magnetRef, 0.2);
 
@@ -43,8 +45,13 @@ export function ActionLink({ href, children, variant = "ghost", tone = "ink", si
   }[variant];
 
   const classes = cn(
-    "group label relative isolate inline-flex shrink-0 items-center overflow-hidden whitespace-nowrap font-medium transition-[color,border-color] duration-500",
-    size === "lg" ? "h-14 gap-4 pl-7 pr-2" : size === "sm" ? "h-11 gap-3 pl-4 pr-1" : "h-12 gap-4 pl-5 pr-1.5",
+    "group label relative isolate inline-flex items-center overflow-hidden font-medium transition-[color,border-color] duration-500",
+    wrap ? "max-w-full whitespace-normal py-2 text-left sm:shrink-0 sm:whitespace-nowrap" : "shrink-0 whitespace-nowrap",
+    size === "lg"
+      ? cn("gap-4 pl-7 pr-2", wrap ? "min-h-14 sm:h-14" : "h-14")
+      : size === "sm"
+        ? cn("gap-3 pl-4 pr-1", wrap ? "min-h-11 sm:h-11" : "h-11")
+        : cn("gap-4 pl-5 pr-1.5", wrap ? "min-h-12 sm:h-12" : "h-12"),
     skin.base,
     skin.hoverText,
     className,
@@ -73,7 +80,7 @@ export function ActionLink({ href, children, variant = "ghost", tone = "ink", si
       <span
         aria-hidden
         className={cn(
-          "grid place-items-center transition-colors duration-500",
+          "grid shrink-0 place-items-center transition-colors duration-500",
           size === "lg" ? "size-10" : size === "sm" ? "size-8" : "size-9",
           skin.chip,
         )}
