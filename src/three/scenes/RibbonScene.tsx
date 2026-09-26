@@ -88,7 +88,8 @@ export function RibbonScene({ state, quality, still = false }: Props) {
     uniforms.uSpan.value = Math.max(6, 3.2 * aspect + 2.2);
     uniforms.uWidth.value = aspect < 1 ? 1.1 : 1.75;
     camera.position.set(0, 0, 9);
-    camera.lookAt(0, 0, 0);
+    // Aimed low so the band sits high in its box, leaving no blank strip above it.
+    camera.lookAt(0, -1.1, 0);
   }, [size, camera, uniforms]);
 
   useFrame((_, raw) => {
